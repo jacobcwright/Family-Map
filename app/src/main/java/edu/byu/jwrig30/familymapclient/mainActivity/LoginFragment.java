@@ -39,7 +39,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button doneButton = view.findViewById(R.id.loginButton);
+        Button doneButton = view.findViewById(R.id.LoginButton);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

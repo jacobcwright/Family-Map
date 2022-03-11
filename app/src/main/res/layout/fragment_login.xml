@@ -1,22 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".mainActivity.LoginFragment">
 
     <TextView
+        android:id="@+id/Email"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="24sp"
-        android:text="Login Fragment" />
+        android:layout_height="78dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Email"
+        app:layout_constraintTop_toBottomOf="@+id/LastName"
+        tools:layout_editor_absoluteX="68dp" />
+
+    <TextView
+        android:id="@+id/Password"
+        android:layout_width="wrap_content"
+        android:layout_height="78dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/prompt_password"
+        app:layout_constraintEnd_toEndOf="@+id/FirstName"
+        app:layout_constraintTop_toBottomOf="@+id/Username" />
+
+    <TextView
+        android:id="@+id/FirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="First Name"
+        app:layout_constraintEnd_toEndOf="@+id/LastName"
+        app:layout_constraintTop_toBottomOf="@+id/Password" />
+
+    <TextView
+        android:id="@+id/Username"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="User Name"
+        app:layout_constraintEnd_toEndOf="@+id/Password"
+        app:layout_constraintTop_toBottomOf="@+id/Port" />
+
+    <TextView
+        android:id="@+id/LastName"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Last Name"
+        app:layout_constraintEnd_toEndOf="@+id/Email"
+        app:layout_constraintTop_toBottomOf="@+id/FirstName" />
+
+    <TextView
+        android:id="@+id/Port"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Server Port"
+        app:layout_constraintEnd_toEndOf="@+id/Username"
+        app:layout_constraintTop_toBottomOf="@+id/Host" />
+
+    <TextView
+        android:id="@+id/Host"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:gravity="center"
+        android:text="Server Host"
+        app:layout_constraintEnd_toEndOf="@+id/Port"
+        tools:layout_editor_absoluteY="15dp" />
+
+    <EditText
+        android:id="@+id/LastNameEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginBottom="12dp"
+        android:text="Last Name"
+        app:layout_constraintBottom_toTopOf="@+id/EmailEnter"
+        app:layout_constraintStart_toStartOf="@+id/FirstNameEnter" />
+
+    <EditText
+        android:id="@+id/HostEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginBottom="12dp"
+        android:text="Host"
+        app:layout_constraintBottom_toTopOf="@+id/PortEnter"
+        tools:layout_editor_absoluteX="110dp" />
+
+    <EditText
+        android:id="@+id/PortEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginBottom="4dp"
+        android:text="Port"
+        app:layout_constraintBottom_toTopOf="@+id/UsernameEnter"
+        app:layout_constraintStart_toStartOf="@+id/HostEnter" />
+
+    <EditText
+        android:id="@+id/UsernameEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginBottom="4dp"
+        android:text="username"
+        app:layout_constraintBottom_toTopOf="@+id/PasswordEnter"
+        app:layout_constraintStart_toStartOf="@+id/PortEnter" />
+
+    <EditText
+        android:id="@+id/FirstNameEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="77dp"
+        android:layout_marginBottom="4dp"
+        android:text="First Name"
+        app:layout_constraintBottom_toTopOf="@+id/LastNameEnter"
+        app:layout_constraintStart_toStartOf="@+id/PasswordEnter" />
+
+    <EditText
+        android:id="@+id/PasswordEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="78dp"
+        android:layout_marginBottom="12dp"
+        android:text="Password"
+        app:layout_constraintBottom_toTopOf="@+id/FirstNameEnter"
+        app:layout_constraintStart_toStartOf="@+id/UsernameEnter" />
+
+    <EditText
+        android:id="@+id/EmailEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="78dp"
+        android:text="Email"
+        app:layout_constraintStart_toStartOf="@+id/LastNameEnter"
+        tools:layout_editor_absoluteY="526dp" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/RegisterButton"
+        android:layout_width="127dp"
+        android:layout_height="63dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="64dp"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:text="Register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/LoginButton" />
+
+    <Button
+        android:id="@+id/LoginButton"
+        android:layout_width="127dp"
+        android:layout_height="63dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="64dp"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:text="Sign in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/RegisterButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Done"/>
+        app:constraint_referenced_ids="Password,FirstName,Username,LastName,Port,Email,Host" />
 
-</FrameLayout>
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="UsernameEnter,FirstNameEnter,HostEnter,PortEnter,PasswordEnter,EmailEnter,LastNameEnter" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="LoginButton,RegisterButton" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="LoginButton,RegisterButton" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="PortEnter,HostEnter,UsernameEnter,FirstName,Username,EmailEnter,LastName,PasswordEnter,Port,Host,Password,FirstNameEnter,LastNameEnter,Email" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
