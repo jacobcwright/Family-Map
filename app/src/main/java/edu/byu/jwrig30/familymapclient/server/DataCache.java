@@ -8,6 +8,7 @@ import model.Person;
 
 /**
  * Data cache for Family Map Server
+ * Singleton
  */
 class DataCache {
     private static DataCache instance = new DataCache();

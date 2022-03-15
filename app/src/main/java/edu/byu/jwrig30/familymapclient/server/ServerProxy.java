@@ -1,5 +1,22 @@
 package edu.byu.jwrig30.familymapclient.server;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import com.google.gson.Gson;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import request.LoginRequest;
+import result.LoginResult;
+
 /**
  * Proxy for Family Map Server
  */
@@ -13,13 +30,77 @@ public class ServerProxy {
      * De-serialize to result and return it
      */
 
-    // LoginResult login(LoginRequest){}
+    LoginResult login(LoginRequest req, String serverHost, String serverPort){
+        try{
+            // create url and open connection
+            URL url = new URL("http://" + serverHost + "/" + serverPort + "/user/login");
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+
+            // Post request and has request body
+            http.setRequestMethod("POST");
+            http.setDoOutput(true);
+
+            http.addRequestProperty("Accept", "application/json");
+            http.connect();
+
+            JSONObject json = new JSONObject();
+            json.put("username", req.getUsername());
+            json.put("password", req.getPassword());
+            OutputStream reqBody = http.getOutputStream();
+            writeString(json.toString(), reqBody);
+            reqBody.close();
+            if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
+                // The HTTP response status code indicates success,
+                // so print a success message
+                System.out.println("Route successfully claimed.");
+            }
+            else {
+
+                // The HTTP response status code indicates an error
+                // occurred, so print out the message from the HTTP response
+                System.out.println("ERROR: " + http.getResponseMessage());
+
+                // Get the error stream containing the HTTP response body (if any)
+                InputStream respBody = http.getErrorStream();
+
+                // Extract data from the HTTP response body
+                String respData = readString(respBody);
+
+                // Display the data returned from the server
+                System.out.println(respData);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
 
     // RegisterResult register(RegisterRequest){}
 
     // PersonResult getPeople(PersonRequest){}
 
     // EventResult getEvents(EventRequest){}
+
+
+    private static void writeString(String str, OutputStream os) throws IOException {
+        OutputStreamWriter sw = new OutputStreamWriter(os);
+        sw.write(str);
+        sw.flush();
+    }
+
+    private static String readString(InputStream is) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        InputStreamReader sr = new InputStreamReader(is);
+        char[] buf = new char[1024];
+        int len;
+        while ((len = sr.read(buf)) > 0) {
+            sb.append(buf, 0, len);
+        }
+        return sb.toString();
+    }
 
 
 }
