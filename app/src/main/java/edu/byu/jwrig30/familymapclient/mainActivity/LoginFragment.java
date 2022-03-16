@@ -7,10 +7,15 @@ import androidx.fragment.app.Fragment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import java.net.MalformedURLException;
 import java.util.concurrent.ExecutorService;
@@ -23,7 +28,16 @@ import edu.byu.jwrig30.familymapclient.tasks.LoginTask;
 public class LoginFragment extends Fragment {
 
    private Listener listener;
-
+    EditText host;
+    EditText port;
+    EditText username;
+    EditText password ;
+    EditText firstName;
+    EditText lastName;
+    EditText email;
+    RadioGroup gender;
+    Button loginButton;
+    Button registerButton ;
     public interface Listener{
         void notifyDone();
     }
@@ -43,12 +57,59 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        Watcher watcher = new Watcher();
 
-        Button doneButton = view.findViewById(R.id.LoginButton);
-        doneButton.setOnClickListener(new View.OnClickListener() {
+        // Set text fields & buttons & watchers
+        host = view.findViewById(R.id.Host);
+        host.addTextChangedListener(watcher);
+        port = view.findViewById(R.id.Port);
+        port.addTextChangedListener(watcher);
+        username = view.findViewById(R.id.Username);
+        username.addTextChangedListener(watcher);
+        password = view.findViewById(R.id.Password);
+        password.addTextChangedListener(watcher);
+        firstName = view.findViewById(R.id.FirstName);
+        firstName.addTextChangedListener(watcher);
+        lastName = view.findViewById(R.id.LastName);
+        lastName.addTextChangedListener(watcher);
+        email = view.findViewById(R.id.Email);
+        email.addTextChangedListener(watcher);
+        gender = view.findViewById(R.id.gender);
+        gender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Watcher().onTextChanged("", 0, 0,0);
+            }
+        });
+        loginButton = view.findViewById(R.id.LoginButton);
+        registerButton = view.findViewById(R.id.RegisterButton);
+
+        // create loginButton action
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Handler uiThreadMessageHandler = new Handler(Looper.getMainLooper()){
+                    @Override
+                    public void handleMessage(Message message) {
+                        Bundle bundle = message.getData();
+
+                    }
+
+                };
+                LoginTask task = new LoginTask(uiThreadMessageHandler);
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.submit(task);
+
+                if(listener != null) {
+                    listener.notifyDone();
+                }
+            }
+        });
+
+        // create register button action
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Handler uiThreadMessageHandler = new Handler(Looper.getMainLooper()){
@@ -71,4 +132,45 @@ public class LoginFragment extends Fragment {
 
         return view;
     }
+
+
+    private class Watcher implements TextWatcher{
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // enable login button?
+            if(!TextUtils.isEmpty(host.getText()) &&
+                    !TextUtils.isEmpty(port.getText()) &&
+                    !TextUtils.isEmpty(username.getText()) &&
+                    !TextUtils.isEmpty(password.getText())
+            ){
+                loginButton.setEnabled(true);
+            }
+            else{
+                loginButton.setEnabled(false);
+            }
+            // enable register button?
+            if(!TextUtils.isEmpty(host.getText()) &&
+                !TextUtils.isEmpty(port.getText()) &&
+                !TextUtils.isEmpty(username.getText()) &&
+                !TextUtils.isEmpty(password.getText()) &&
+                !TextUtils.isEmpty(firstName.getText()) &&
+                !TextUtils.isEmpty(lastName.getText()) &&
+                !TextUtils.isEmpty(email.getText()) &&
+                (gender.getCheckedRadioButtonId() != -1)
+            ){
+                registerButton.setEnabled(true);
+            }
+            else{
+                registerButton.setEnabled(false);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+    }
+
 }
