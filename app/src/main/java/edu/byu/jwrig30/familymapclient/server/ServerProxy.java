@@ -15,7 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import request.LoginRequest;
+import request.RegisterRequest;
 import result.LoginResult;
+import result.RegisterResult;
 
 /**
  * Proxy for Family Map Server
@@ -31,6 +33,7 @@ public class ServerProxy {
      */
 
     LoginResult login(LoginRequest req, String serverHost, String serverPort){
+        Gson gson = new Gson();
         try{
             // create url and open connection
             URL url = new URL("http://" + serverHost + "/" + serverPort + "/user/login");
@@ -42,23 +45,29 @@ public class ServerProxy {
 
             http.addRequestProperty("Accept", "application/json");
             http.connect();
-
-            JSONObject json = new JSONObject();
-            json.put("username", req.getUsername());
-            json.put("password", req.getPassword());
+//            JSONObject json = new JSONObject();
+//            json.put("username", req.getUsername());
+//            json.put("password", req.getPassword());
+//            OutputStream reqBody = http.getOutputStream();
+//            writeString(json.toString(), reqBody);
+            String reqData = gson.toJson(req);
             OutputStream reqBody = http.getOutputStream();
-            writeString(json.toString(), reqBody);
+            writeString(reqData, reqBody);
             reqBody.close();
             if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
-                // The HTTP response status code indicates success,
-                // so print a success message
                 System.out.println("Route successfully claimed.");
+                // get result and return it
+                // Get the error stream containing the HTTP response body (if any)
+                InputStream respBody = http.getInputStream();
+
+                // Extract data from the HTTP response body
+                String respData = readString(respBody);
+
+                LoginResult result = gson.fromJson(respData, LoginResult.class);
+                return result;
+
             }
             else {
-
-                // The HTTP response status code indicates an error
-                // occurred, so print out the message from the HTTP response
                 System.out.println("ERROR: " + http.getResponseMessage());
 
                 // Get the error stream containing the HTTP response body (if any)
@@ -69,16 +78,73 @@ public class ServerProxy {
 
                 // Display the data returned from the server
                 System.out.println(respData);
+
+                // get result and return it
+                LoginResult result = gson.fromJson(respData, LoginResult.class);
+                return result;
             }
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         return null;
     }
 
-    // RegisterResult register(RegisterRequest){}
+    RegisterResult register(RegisterRequest req, String serverHost, String serverPort){
+        Gson gson = new Gson();
+        try{
+            // create url and open connection
+            URL url = new URL("http://" + serverHost + "/" + serverPort + "/user/register");
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+
+            // Post request and has request body
+            http.setRequestMethod("POST");
+            http.setDoOutput(true);
+
+            // accepts json
+            http.addRequestProperty("Accept", "application/json");
+            http.connect();
+
+            // serialize object into json and send request
+            String reqData = gson.toJson(req);
+            OutputStream reqBody = http.getOutputStream();
+            writeString(reqData, reqBody);
+            reqBody.close();
+
+            // get results
+            if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                System.out.println("Route successfully claimed.");
+                // get result and return it
+                // Get the error stream containing the HTTP response body (if any)
+                InputStream respBody = http.getInputStream();
+
+                // Extract data from the HTTP response body
+                String respData = readString(respBody);
+
+                RegisterResult result = gson.fromJson(respData, RegisterResult.class);
+                return result;
+
+            }
+            else {
+                System.out.println("ERROR: " + http.getResponseMessage());
+
+                // Get the error stream containing the HTTP response body (if any)
+                InputStream respBody = http.getErrorStream();
+
+                // Extract data from the HTTP response body
+                String respData = readString(respBody);
+
+                // Display the data returned from the server
+                System.out.println(respData);
+
+                // get result and return it
+                RegisterResult result = gson.fromJson(respData, RegisterResult.class);
+                return result;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     // PersonResult getPeople(PersonRequest){}
 
