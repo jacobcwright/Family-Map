@@ -84,7 +84,9 @@ public class LoginFragment extends Fragment {
             }
         });
         loginButton = view.findViewById(R.id.LoginButton);
+        loginButton.setEnabled(false);
         registerButton = view.findViewById(R.id.RegisterButton);
+        registerButton.setEnabled(false);
 
         // create loginButton action
         loginButton.setOnClickListener(new View.OnClickListener() {
