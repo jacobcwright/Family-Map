@@ -32,7 +32,7 @@ public class ServerProxy {
      * De-serialize to result and return it
      */
 
-    LoginResult login(LoginRequest req, String serverHost, String serverPort){
+    public LoginResult login(LoginRequest req, String serverHost, String serverPort){
         Gson gson = new Gson();
         try{
             // create url and open connection
@@ -89,7 +89,7 @@ public class ServerProxy {
         return null;
     }
 
-    RegisterResult register(RegisterRequest req, String serverHost, String serverPort){
+    public RegisterResult register(RegisterRequest req, String serverHost, String serverPort){
         Gson gson = new Gson();
         try{
             // create url and open connection
