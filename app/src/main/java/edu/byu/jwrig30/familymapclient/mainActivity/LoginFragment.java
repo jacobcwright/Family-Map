@@ -109,12 +109,10 @@ public class LoginFragment extends Fragment {
                     public void handleMessage(Message message) {
                         // ????
                         Bundle bundle = message.getData();
-                        bundle.putString("Server Host", host.getText().toString());
-                        bundle.putString("Server Port", port.getText().toString());
                     }
                 };
                 LoginRequest request = new LoginRequest(username.getText().toString(), password.getText().toString());
-                LoginTask task = new LoginTask(uiThreadMessageHandler, request);
+                LoginTask task = new LoginTask(uiThreadMessageHandler, request, host.getText().toString(), port.getText().toString());
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(task);
 
@@ -132,14 +130,12 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void handleMessage(Message message) {
                         Bundle bundle = message.getData();
-                        bundle.putString("Server Host", host.getText().toString());
-                        bundle.putString("Server Port", port.getText().toString());
                     }
 
                 };
                 RegisterRequest request = new RegisterRequest(username.getText().toString(), password.getText().toString(),
                 email.getText().toString(), firstName.getText().toString(), lastName.getText().toString(), (male.isChecked() ? "m" : "f"));
-                RegisterTask task = new RegisterTask(uiThreadMessageHandler,request);
+                RegisterTask task = new RegisterTask(uiThreadMessageHandler,request, host.getText().toString(), port.getText().toString());
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(task);
 
@@ -151,6 +147,8 @@ public class LoginFragment extends Fragment {
 
         return view;
     }
+
+
 
 
     private class Watcher implements TextWatcher{
@@ -195,6 +193,4 @@ public class LoginFragment extends Fragment {
             }
         }
     }
-
-
 }

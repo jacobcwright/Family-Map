@@ -10,14 +10,18 @@ public class RegisterTask implements Runnable {
     private final Handler messageHandler;
     RegisterRequest request;
     RegisterResult result;
+    String serverHost;
+    String serverPort;
 
-    public RegisterTask(Handler messageHandler, RegisterRequest request) {
+    public RegisterTask(Handler messageHandler, RegisterRequest request, String host, String port) {
         this.messageHandler = messageHandler;
         this.request = request;
+        this.serverHost = host;
+        this.serverPort = port;
     }
 
     @Override
     public void run() {
-        result = new ServerProxy().register(request, "Server Host", "Server Port");
+        result = new ServerProxy().register(request, serverHost, serverPort);
     }
 }
