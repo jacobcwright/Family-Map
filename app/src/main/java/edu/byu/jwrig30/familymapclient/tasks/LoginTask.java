@@ -1,6 +1,8 @@
 package edu.byu.jwrig30.familymapclient.tasks;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 
 import edu.byu.jwrig30.familymapclient.server.ServerProxy;
 import request.LoginRequest;
@@ -25,5 +27,11 @@ public class LoginTask implements Runnable {
         // Create Login Request and call login
          result = new ServerProxy().login(request, serverHost, serverPort);
          // get result and send message using sendMessage()
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("LoginResult", result.getSuccess());
+        Message message = Message.obtain();
+        message.setData(bundle);
+        messageHandler.sendMessage(message);
     }
+
 }

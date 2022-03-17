@@ -111,15 +111,18 @@ public class LoginFragment extends Fragment {
                 Handler uiThreadMessageHandler = new Handler(Looper.getMainLooper()){
                     @Override
                     public void handleMessage(Message message) {
-                        // ????
                         Bundle bundle = message.getData();
-                        if(listener != null) {
-                            listener.notifyDone();
+                        if(bundle.getBoolean("LoginResult")){
+                            if(listener != null) {
+                                listener.notifyDone();
+                            }
                         }
-//                        Context context = getContext();
-//                        CharSequence text = "Logging in";
-//                        int duration = Toast.LENGTH_SHORT;
-//                        Toast.makeText(context, text, duration).show();
+                        else{
+                            Context context = getContext();
+                            CharSequence text = "Invalid login";
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast.makeText(context, text, duration).show();
+                        }
                     }
                 };
                 LoginRequest request = new LoginRequest(username.getText().toString(), password.getText().toString());
@@ -127,9 +130,9 @@ public class LoginFragment extends Fragment {
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(task);
 
-                if(listener != null) {
-                    listener.notifyDone();
-                }
+//                if(listener != null) {
+//                    listener.notifyDone();
+//                }
             }
         });
 
