@@ -129,10 +129,6 @@ public class LoginFragment extends Fragment {
                 LoginTask task = new LoginTask(uiThreadMessageHandler, request, host.getText().toString(), port.getText().toString());
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(task);
-
-//                if(listener != null) {
-//                    listener.notifyDone();
-//                }
             }
         });
 
@@ -144,21 +140,24 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void handleMessage(Message message) {
                         Bundle bundle = message.getData();
-                        if(listener != null) {
-                            listener.notifyDone();
+                        if(bundle.getBoolean("RegisterResult")){
+                            if(listener != null) {
+                                listener.notifyDone();
+                            }
+                        }
+                        else{
+                            Context context = getContext();
+                            CharSequence text = "Invalid register";
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast.makeText(context, text, duration).show();
                         }
                     }
-
                 };
                 RegisterRequest request = new RegisterRequest(username.getText().toString(), password.getText().toString(),
                 email.getText().toString(), firstName.getText().toString(), lastName.getText().toString(), (male.isChecked() ? "m" : "f"));
                 RegisterTask task = new RegisterTask(uiThreadMessageHandler,request, host.getText().toString(), port.getText().toString());
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(task);
-
-                if(listener != null) {
-                    listener.notifyDone();
-                }
             }
         });
 
