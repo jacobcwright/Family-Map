@@ -130,8 +130,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:gravity="left"
-        android:id="@+id/gender">
+        android:gravity="left">
 
         <TextView
             android:layout_width="100dp"
@@ -142,12 +141,14 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:text="Male"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:id="@+id/Male" />
         <RadioButton
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:text="Female"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:id="@+id/Female" />
     </RadioGroup>
 
 <LinearLayout

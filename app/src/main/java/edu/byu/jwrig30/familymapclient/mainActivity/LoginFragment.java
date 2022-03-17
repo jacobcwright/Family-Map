@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import java.net.MalformedURLException;
@@ -35,7 +36,8 @@ public class LoginFragment extends Fragment {
     EditText firstName;
     EditText lastName;
     EditText email;
-    RadioGroup gender;
+    RadioButton male;
+    RadioButton female;
     Button loginButton;
     Button registerButton ;
     public interface Listener{
@@ -76,11 +78,18 @@ public class LoginFragment extends Fragment {
         lastName.addTextChangedListener(watcher);
         email = view.findViewById(R.id.Email);
         email.addTextChangedListener(watcher);
-        gender = view.findViewById(R.id.gender);
-        gender.setOnClickListener(new View.OnClickListener() {
+        male = view.findViewById(R.id.Male);
+        male.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Watcher().onTextChanged("", 0, 0,0);
+                new Watcher().checkInputs();
+            }
+        });
+        female = view.findViewById(R.id.Female);
+        female.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Watcher().checkInputs();
             }
         });
         loginButton = view.findViewById(R.id.LoginButton);
@@ -143,6 +152,13 @@ public class LoginFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            checkInputs();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+
+        public void checkInputs(){
             // enable login button?
             if(!TextUtils.isEmpty(host.getText()) &&
                     !TextUtils.isEmpty(port.getText()) &&
@@ -156,13 +172,13 @@ public class LoginFragment extends Fragment {
             }
             // enable register button?
             if(!TextUtils.isEmpty(host.getText()) &&
-                !TextUtils.isEmpty(port.getText()) &&
-                !TextUtils.isEmpty(username.getText()) &&
-                !TextUtils.isEmpty(password.getText()) &&
-                !TextUtils.isEmpty(firstName.getText()) &&
-                !TextUtils.isEmpty(lastName.getText()) &&
-                !TextUtils.isEmpty(email.getText()) &&
-                (gender.getCheckedRadioButtonId() != -1)
+                    !TextUtils.isEmpty(port.getText()) &&
+                    !TextUtils.isEmpty(username.getText()) &&
+                    !TextUtils.isEmpty(password.getText()) &&
+                    !TextUtils.isEmpty(firstName.getText()) &&
+                    !TextUtils.isEmpty(lastName.getText()) &&
+                    !TextUtils.isEmpty(email.getText()) &&
+                    (male.isChecked() || female.isChecked())
             ){
                 registerButton.setEnabled(true);
             }
@@ -170,9 +186,7 @@ public class LoginFragment extends Fragment {
                 registerButton.setEnabled(false);
             }
         }
-
-        @Override
-        public void afterTextChanged(Editable s) {}
     }
+
 
 }
