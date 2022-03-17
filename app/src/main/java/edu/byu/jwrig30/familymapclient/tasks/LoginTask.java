@@ -8,15 +8,17 @@ import result.LoginResult;
 
 public class LoginTask implements Runnable {
     private final Handler messageHandler;
+    LoginRequest request;
+    LoginResult result;
 
-    public LoginTask(Handler messageHandler) {
+    public LoginTask(Handler messageHandler, LoginRequest req) {
         this.messageHandler = messageHandler;
+        this.request = req;
     }
 
     @Override
     public void run() {
         // Create Login Request and call login
-        LoginRequest request = null;
-        LoginResult result = new ServerProxy().login(request, "Server Host", "Server Name");
+         result = new ServerProxy().login(request, "Server Host", "Server Name");
     }
 }

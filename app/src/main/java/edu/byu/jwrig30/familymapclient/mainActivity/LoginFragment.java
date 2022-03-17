@@ -24,6 +24,9 @@ import java.util.concurrent.Executors;
 
 import edu.byu.jwrig30.familymapclient.R;
 import edu.byu.jwrig30.familymapclient.tasks.LoginTask;
+import edu.byu.jwrig30.familymapclient.tasks.RegisterTask;
+import request.LoginRequest;
+import request.RegisterRequest;
 
 
 public class LoginFragment extends Fragment {
@@ -104,12 +107,14 @@ public class LoginFragment extends Fragment {
                 Handler uiThreadMessageHandler = new Handler(Looper.getMainLooper()){
                     @Override
                     public void handleMessage(Message message) {
+                        // ????
                         Bundle bundle = message.getData();
-
+                        bundle.putString("Server Host", host.getText().toString());
+                        bundle.putString("Server Port", port.getText().toString());
                     }
-
                 };
-                LoginTask task = new LoginTask(uiThreadMessageHandler);
+                LoginRequest request = new LoginRequest(username.getText().toString(), password.getText().toString());
+                LoginTask task = new LoginTask(uiThreadMessageHandler, request);
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(task);
 
@@ -127,11 +132,14 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void handleMessage(Message message) {
                         Bundle bundle = message.getData();
-
+                        bundle.putString("Server Host", host.getText().toString());
+                        bundle.putString("Server Port", port.getText().toString());
                     }
 
                 };
-                LoginTask task = new LoginTask(uiThreadMessageHandler);
+                RegisterRequest request = new RegisterRequest(username.getText().toString(), password.getText().toString(),
+                email.getText().toString(), firstName.getText().toString(), lastName.getText().toString(), (male.isChecked() ? "m" : "f"));
+                RegisterTask task = new RegisterTask(uiThreadMessageHandler,request);
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(task);
 
