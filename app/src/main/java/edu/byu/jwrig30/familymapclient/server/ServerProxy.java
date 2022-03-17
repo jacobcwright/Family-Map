@@ -36,7 +36,7 @@ public class ServerProxy {
         Gson gson = new Gson();
         try{
             // create url and open connection
-            URL url = new URL("http://" + serverHost + "/" + serverPort + "/user/login");
+            URL url = new URL("http://" + serverHost + ":" + serverPort + "/user/login");
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
             // Post request and has request body

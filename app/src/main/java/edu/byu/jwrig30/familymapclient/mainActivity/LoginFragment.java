@@ -113,6 +113,9 @@ public class LoginFragment extends Fragment {
                     public void handleMessage(Message message) {
                         // ????
                         Bundle bundle = message.getData();
+                        if(listener != null) {
+                            listener.notifyDone();
+                        }
 //                        Context context = getContext();
 //                        CharSequence text = "Logging in";
 //                        int duration = Toast.LENGTH_SHORT;
@@ -138,6 +141,9 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void handleMessage(Message message) {
                         Bundle bundle = message.getData();
+                        if(listener != null) {
+                            listener.notifyDone();
+                        }
                     }
 
                 };
