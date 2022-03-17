@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,9 +15,13 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import request.EventRequest;
 import request.LoginRequest;
+import request.PersonRequest;
 import request.RegisterRequest;
+import result.EventResult;
 import result.LoginResult;
+import result.PersonResult;
 import result.RegisterResult;
 
 /**
@@ -45,17 +50,13 @@ public class ServerProxy {
 
             http.addRequestProperty("Accept", "application/json");
             http.connect();
-//            JSONObject json = new JSONObject();
-//            json.put("username", req.getUsername());
-//            json.put("password", req.getPassword());
-//            OutputStream reqBody = http.getOutputStream();
-//            writeString(json.toString(), reqBody);
+
             String reqData = gson.toJson(req);
             OutputStream reqBody = http.getOutputStream();
             writeString(reqData, reqBody);
             reqBody.close();
             if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                System.out.println("Route successfully claimed.");
+                System.out.println("Login Success");
                 // get result and return it
                 // Get the error stream containing the HTTP response body (if any)
                 InputStream respBody = http.getInputStream();
@@ -85,8 +86,11 @@ public class ServerProxy {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("in catch statement");
+            System.out.println(e.getMessage());
+            LoginResult result = new LoginResult(false, "Failed to login");
+            return result;
         }
-        return null;
     }
 
     public RegisterResult register(RegisterRequest req, String serverHost, String serverPort){
@@ -112,7 +116,7 @@ public class ServerProxy {
 
             // get results
             if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                System.out.println("Route successfully claimed.");
+                System.out.println("Register success");
                 // get result and return it
                 // Get the error stream containing the HTTP response body (if any)
                 InputStream respBody = http.getInputStream();
@@ -142,13 +146,130 @@ public class ServerProxy {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("in catch statement");
+            System.out.println(e.getMessage());
+            RegisterResult result = new RegisterResult(false, "Failed to register");
+            return result;
         }
-        return null;
     }
 
-    // PersonResult getPeople(PersonRequest){}
+    public PersonResult getPeople(PersonRequest req, String serverHost, String serverPort){
+        Gson gson = new Gson();
+        try{
+            // create url and open connection
+            URL url = new URL("http://" + serverHost + ":" + serverPort + "/person");
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
-    // EventResult getEvents(EventRequest){}
+            // Post request and no request body
+            http.setRequestMethod("GET");
+            http.setDoOutput(false);
+
+            // add authtoken
+            http.setRequestProperty("Authorization", req.getAuthToken());
+
+            // accepts json & connect
+            http.addRequestProperty("Accept", "application/json");
+            http.connect();
+
+//            String reqData = gson.toJson(req);
+//            OutputStream reqBody = http.getOutputStream();
+//            writeString(reqData, reqBody);
+//            reqBody.close();
+            if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                System.out.println("Person data success");
+                // get result and return it
+                // Get the error stream containing the HTTP response body (if any)
+                InputStream respBody = http.getInputStream();
+
+                // Extract data from the HTTP response body
+                String respData = readString(respBody);
+
+                PersonResult result = gson.fromJson(respData, PersonResult.class);
+                return result;
+            }
+            else {
+                System.out.println("ERROR: " + http.getResponseMessage());
+
+                // Get the error stream containing the HTTP response body (if any)
+                InputStream respBody = http.getErrorStream();
+
+                // Extract data from the HTTP response body
+                String respData = readString(respBody);
+
+                // Display the data returned from the server
+                System.out.println(respData);
+
+                // get result and return it
+                PersonResult result = gson.fromJson(respData, PersonResult.class);
+                return result;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("in catch statement");
+            System.out.println(e.getMessage());
+            PersonResult result = new PersonResult(false, "Failed to login");
+            return result;
+        }
+    }
+
+    public EventResult getEvents(EventRequest req, String serverHost, String serverPort){
+        Gson gson = new Gson();
+        try{
+            // create url and open connection
+            URL url = new URL("http://" + serverHost + ":" + serverPort + "/event");
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+
+            // Post request and no request body
+            http.setRequestMethod("GET");
+            http.setDoOutput(false);
+
+            // add authtoken
+            http.setRequestProperty("Authorization", req.getAuthToken());
+
+            // accepts json & connect
+            http.addRequestProperty("Accept", "application/json");
+            http.connect();
+
+//            String reqData = gson.toJson(req);
+//            OutputStream reqBody = http.getOutputStream();
+//            writeString(reqData, reqBody);
+//            reqBody.close();
+            if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                System.out.println("Person data success");
+                // get result and return it
+                // Get the error stream containing the HTTP response body (if any)
+                InputStream respBody = http.getInputStream();
+
+                // Extract data from the HTTP response body
+                String respData = readString(respBody);
+
+                EventResult result = gson.fromJson(respData, EventResult.class);
+                return result;
+            }
+            else {
+                System.out.println("ERROR: " + http.getResponseMessage());
+
+                // Get the error stream containing the HTTP response body (if any)
+                InputStream respBody = http.getErrorStream();
+
+                // Extract data from the HTTP response body
+                String respData = readString(respBody);
+
+                // Display the data returned from the server
+                System.out.println(respData);
+
+                // get result and return it
+                EventResult result = gson.fromJson(respData, EventResult.class);
+                return result;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("in catch statement");
+            System.out.println(e.getMessage());
+            EventResult result = new EventResult(false, "Failed to login");
+            return result;
+        }
+    }
 
 
     private static void writeString(String str, OutputStream os) throws IOException {

@@ -116,6 +116,10 @@ public class LoginFragment extends Fragment {
                             if(listener != null) {
                                 listener.notifyDone();
                             }
+                            Context context = getContext();
+                            CharSequence text = "Welcome " + bundle.getString("FirstName") + " " + bundle.getString("LastName");
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast.makeText(context, text, duration).show();
                         }
                         else{
                             Context context = getContext();
