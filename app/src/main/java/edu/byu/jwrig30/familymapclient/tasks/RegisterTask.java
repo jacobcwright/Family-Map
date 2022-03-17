@@ -23,5 +23,7 @@ public class RegisterTask implements Runnable {
     @Override
     public void run() {
         result = new ServerProxy().register(request, serverHost, serverPort);
+        // get result and send message using sendMessage()
+
     }
 }

@@ -24,5 +24,6 @@ public class LoginTask implements Runnable {
     public void run() {
         // Create Login Request and call login
          result = new ServerProxy().login(request, serverHost, serverPort);
+         // get result and send message using sendMessage()
     }
 }

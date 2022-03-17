@@ -1,5 +1,8 @@
 package edu.byu.jwrig30.familymapclient.mainActivity;
 
+import static android.widget.Toast.makeText;
+
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.util.concurrent.ExecutorService;
@@ -109,6 +113,10 @@ public class LoginFragment extends Fragment {
                     public void handleMessage(Message message) {
                         // ????
                         Bundle bundle = message.getData();
+//                        Context context = getContext();
+//                        CharSequence text = "Logging in";
+//                        int duration = Toast.LENGTH_SHORT;
+//                        Toast.makeText(context, text, duration).show();
                     }
                 };
                 LoginRequest request = new LoginRequest(username.getText().toString(), password.getText().toString());
