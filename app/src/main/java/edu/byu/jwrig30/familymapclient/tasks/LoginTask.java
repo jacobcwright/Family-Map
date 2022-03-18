@@ -68,6 +68,10 @@ public class LoginTask implements Runnable {
             message.setData(bundle);
             messageHandler.sendMessage(message);
         }
+        else {
+            Message message = Message.obtain();
+            messageHandler.sendMessage(message);
+        }
     }
 
 }
