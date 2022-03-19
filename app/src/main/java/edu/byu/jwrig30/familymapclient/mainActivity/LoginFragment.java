@@ -113,13 +113,13 @@ public class LoginFragment extends Fragment {
                     public void handleMessage(Message message) {
                         Bundle bundle = message.getData();
                         if(bundle.getBoolean("LoginResult")){
-                            if(listener != null) {
-                                listener.notifyDone();
-                            }
                             Context context = getContext();
                             CharSequence text = "Welcome " + bundle.getString("FirstName") + " " + bundle.getString("LastName");
                             int duration = Toast.LENGTH_SHORT;
                             Toast.makeText(context, text, duration).show();
+                            if(listener != null) {
+                                listener.notifyDone();
+                            }
                         }
                         else{
                             Context context = getContext();
@@ -145,13 +145,13 @@ public class LoginFragment extends Fragment {
                     public void handleMessage(Message message) {
                         Bundle bundle = message.getData();
                         if(bundle.getBoolean("RegisterResult")){
-                            if(listener != null) {
-                                listener.notifyDone();
-                            }
                             Context context = getContext();
                             CharSequence text = "Welcome " + bundle.getString("FirstName") + " " + bundle.getString("LastName");
                             int duration = Toast.LENGTH_SHORT;
                             Toast.makeText(context, text, duration).show();
+                            if(listener != null) {
+                                listener.notifyDone();
+                            }
                         }
                         else{
                             Context context = getContext();
@@ -171,8 +171,6 @@ public class LoginFragment extends Fragment {
 
         return view;
     }
-
-
 
 
     private class Watcher implements TextWatcher{

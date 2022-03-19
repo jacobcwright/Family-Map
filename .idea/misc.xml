@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Jacob W/Desktop/cs240/FamilyMapClient/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Jacob W/Desktop/cs240/FamilyMapClient/app/src/main/res/layout/fragment_google_maps.xml" value="0.2546875" />
         <entry key="..\:/Users/Jacob W/Desktop/cs240/FamilyMapClient/app/src/main/res/layout/fragment_login.xml" value="0.2546875" />
         <entry key="..\:/Users/Jacob W/Desktop/cs240/FamilyMapClient/app/src/main/res/layout/fragment_map.xml" value="0.1" />
       </map>
