@@ -26,13 +26,14 @@
             android:layout_margin="2dp"
             android:textAlignment="center"
             android:gravity="center"
-            android:id="@+id/Icon"/>
+            android:icon="@drawable/ic_default"
+            android:id="@+id/detailsIcon" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
-            android:text="Event Details"
+            android:text="Click on a marker to see event details"
             android:textAlignment="center"
             android:gravity="center"
             android:id="@+id/detailsText"/>

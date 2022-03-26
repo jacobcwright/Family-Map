@@ -27,37 +27,35 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
+        inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.search:
-                Intent search = new Intent(this,SearchActivity.class);
-                this.startActivity(search);
-                return true;
-            case R.id.settings:
-                Toast.makeText(this, "Setting", Toast.LENGTH_LONG).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle item selection
+//        switch (item.getItemId()) {
+//            case R.id.search:
+//                Intent search = new Intent(this,SearchActivity.class);
+//                this.startActivity(search);
+//                return true;
+//            case R.id.settings:
+//                Toast.makeText(this, "Setting", Toast.LENGTH_LONG).show();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // getSupportActionBar().setIcon();
-//        Iconify.with(new FontAwesomeModule());
-
-
 
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentFrameLayout);
+
         if(fragment == null) {
             fragment = createLoginFragment();
 
