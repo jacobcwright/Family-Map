@@ -2,6 +2,8 @@ package edu.byu.jwrig30.familymapclient.mainActivity;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,10 +19,18 @@ import edu.byu.jwrig30.familymapclient.R;
 public class MainActivity extends AppCompatActivity implements LoginFragment.Listener{
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        getSupportActionBar().setIcon();
+        // getSupportActionBar().setIcon();
 //        Iconify.with(new FontAwesomeModule());
 
 
