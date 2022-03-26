@@ -1,9 +1,14 @@
 package edu.byu.jwrig30.familymapclient.mainActivity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,6 +20,7 @@ import androidx.fragment.app.FragmentManager;
 //import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 import edu.byu.jwrig30.familymapclient.R;
+import edu.byu.jwrig30.familymapclient.searchActivity.SearchActivity;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.Listener{
 
@@ -22,8 +28,23 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
-
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.search:
+                Intent search = new Intent(this,SearchActivity.class);
+                this.startActivity(search);
+                return true;
+            case R.id.settings:
+                Toast.makeText(this, "Setting", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
