@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FamilyMapClient"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".searchActivity.SearchActivity"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
