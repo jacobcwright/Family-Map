@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 import edu.byu.jwrig30.familymapclient.R;
@@ -34,6 +37,8 @@ import model.Person;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
     private GoogleMap map;
+    private TextView markerDetails;
+    private ImageView markerIcon;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
@@ -67,6 +72,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapFragment.getMapAsync(this);
         setHasOptionsMenu(true);
 
+        markerDetails = view.findViewById(R.id.EventDetails);
+        markerIcon = view.findViewById(R.id.EventIcon);
+
         return view;
     }
 
@@ -74,6 +82,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMapLoadedCallback(this);
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                //markerDetails.setText(marker.getSnippet());
+                markerDetails.setText("Yay!");
+                return false;
+            }
+        });
 
         // add event markers
         addEvents();
@@ -94,10 +110,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Map<String, Event> events = data.getEvents();
 
         for(Event event : events.values()){
+            StringBuilder details = new StringBuilder();
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
-            map.addMarker(new MarkerOptions()
+            Marker marker = map.addMarker(new MarkerOptions()
                 .position(location)
                 .title(event.getEventType()));
+            marker.setTag(event);
+            setSnippet(marker, event);
         }
     }
+
+    private void setSnippet(Marker marker, Event event){
+        StringBuilder sb = new StringBuilder();
+        Person person = DataCache.getInstance().getPerson(event.getPersonID());
+        sb.append(person.getFirstName()).append(" ").append(person.getLastName()).append("\n");
+        sb.append(event.getEventType().toUpperCase()).append(": ");
+        sb.append(event.getCity()).append(", ").append(event.getCountry()).append(" ");
+        sb.append("(").append(event.getYear()).append(")");
+        marker.setSnippet(sb.toString());
+    }
+
 }
