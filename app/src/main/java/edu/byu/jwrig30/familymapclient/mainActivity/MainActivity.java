@@ -31,23 +31,6 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle item selection
-//        switch (item.getItemId()) {
-//            case R.id.search:
-//                Intent search = new Intent(this,SearchActivity.class);
-//                this.startActivity(search);
-//                return true;
-//            case R.id.settings:
-//                Toast.makeText(this, "Setting", Toast.LENGTH_LONG).show();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
