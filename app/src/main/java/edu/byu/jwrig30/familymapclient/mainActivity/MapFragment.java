@@ -39,6 +39,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.search:
+                Toast.makeText(getActivity(), "Search", Toast.LENGTH_LONG).show();
                 Intent search = new Intent(getActivity(),SearchActivity.class);
                 startActivity(search);
                 return true;
