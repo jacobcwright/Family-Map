@@ -19,10 +19,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 import edu.byu.jwrig30.familymapclient.R;
 import edu.byu.jwrig30.familymapclient.searchActivity.SearchActivity;
+import edu.byu.jwrig30.familymapclient.server.DataCache;
+import model.Event;
+import model.Person;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
@@ -68,10 +75,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map = googleMap;
         map.setOnMapLoadedCallback(this);
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.animateCamera(CameraUpdateFactory.newLatLng(sydney));
+        // add event markers
+        addEvents();
     }
 
     @Override
@@ -81,5 +86,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // onMapReady(...) because the map isn't really all the way ready. If you see that, just
         // move all code where you interact with the map (everything after
         // map.setOnMapLoadedCallback(...) above) to here.
+    }
+
+    private void addEvents(){
+        DataCache data = DataCache.getInstance();
+        ///Person user = data.getCurrentPerson();
+        Map<String, Event> events = data.getEvents();
+
+        for(Event event : events.values()){
+            LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
+            map.addMarker(new MarkerOptions()
+                .position(location)
+                .title(event.getEventType()));
+        }
     }
 }
