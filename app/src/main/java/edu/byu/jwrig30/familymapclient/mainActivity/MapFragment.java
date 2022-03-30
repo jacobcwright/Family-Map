@@ -1,6 +1,8 @@
 package edu.byu.jwrig30.familymapclient.mainActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -109,13 +113,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Map<String, Event> events = data.getEvents();
 
         for(Event event : events.values()){
-            StringBuilder details = new StringBuilder();
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
             Marker marker = map.addMarker(new MarkerOptions()
                 .position(location)
-                .title(event.getEventType()));
+                .title(event.getEventType())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.female)));
             marker.setTag(event);
             setSnippet(marker, event);
+
         }
     }
 

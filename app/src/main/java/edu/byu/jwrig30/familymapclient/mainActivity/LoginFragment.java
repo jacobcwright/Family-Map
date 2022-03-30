@@ -103,6 +103,7 @@ public class LoginFragment extends Fragment {
         loginButton.setEnabled(false);
         registerButton = view.findViewById(R.id.RegisterButton);
         registerButton.setEnabled(false);
+        watcher.checkInputs();
 
         // create loginButton action
         loginButton.setOnClickListener(new View.OnClickListener() {
