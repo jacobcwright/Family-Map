@@ -72,8 +72,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapFragment.getMapAsync(this);
         setHasOptionsMenu(true);
 
-        markerDetails = view.findViewById(R.id.EventDetails);
-        markerIcon = view.findViewById(R.id.EventIcon);
+        markerDetails = view.findViewById(R.id.detailsText);
+        markerIcon = view.findViewById(R.id.detailsIcon);
 
         return view;
     }
@@ -85,8 +85,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
-                //markerDetails.setText(marker.getSnippet());
-                markerDetails.setText("Yay!");
+                markerDetails.setText(marker.getSnippet());
                 return false;
             }
         });
