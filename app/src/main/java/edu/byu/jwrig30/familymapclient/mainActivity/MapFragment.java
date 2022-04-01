@@ -3,6 +3,7 @@ package edu.byu.jwrig30.familymapclient.mainActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -90,6 +91,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
                 markerDetails.setText(marker.getSnippet());
+                markerIcon.setImageResource(R.drawable.female);
                 return false;
             }
         });
@@ -116,8 +118,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
             Marker marker = map.addMarker(new MarkerOptions()
                 .position(location)
-                .title(event.getEventType())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.female)));
+                .title(event.getEventType()));
             marker.setTag(event);
             setSnippet(marker, event);
 
