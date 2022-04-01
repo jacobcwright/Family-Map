@@ -151,4 +151,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+    private void setMarkerColor(){
+        
+    }
+
 }
