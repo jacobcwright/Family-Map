@@ -91,7 +91,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
                 markerDetails.setText(marker.getSnippet());
-                markerIcon.setImageResource(R.drawable.female);
+                setIcon(marker);
                 return false;
             }
         });
@@ -133,6 +133,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         sb.append(event.getCity()).append(", ").append(event.getCountry()).append(" ");
         sb.append("(").append(event.getYear()).append(")");
         marker.setSnippet(sb.toString());
+    }
+
+    private void setIcon(Marker marker){
+        DataCache data = DataCache.getInstance();
+        Event e = (Event) marker.getTag();
+        if(data.getPerson(e.getPersonID()).getGender().equals("f")){
+            markerIcon.setImageResource(R.drawable.female);
+            return;
+        }
+        else if(data.getPerson(e.getPersonID()).getGender().equals("m")){
+            markerIcon.setImageResource(R.drawable.male);
+            return;
+        }
+        else{
+            System.out.println("****Gender is: " + data.getPerson(e.getPersonID()).getGender());
+        }
     }
 
 }
