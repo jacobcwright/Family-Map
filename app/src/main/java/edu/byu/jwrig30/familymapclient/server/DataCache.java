@@ -14,7 +14,7 @@ import model.Person;
  */
 public class DataCache {
     private static DataCache instance = new DataCache();
-    private final Float[] COLORS = {210.0f, 240.0f, 180.0f, 120.0f, 300.0f, 30.0f, 0.0f, 330.0f, 270.0f, 60.0f};
+    private final Float[] COLORS = {30.0f, 210.0f, 330.0f, 240.0f, 180.0f, 120.0f, 300.0f, 0.0f, 270.0f, 60.0f};
     Map<String, Person> people;
     Map<String, Event> events;
     Authtoken authtoken;
