@@ -14,11 +14,12 @@ import model.Person;
  */
 public class DataCache {
     private static DataCache instance = new DataCache();
-
+    private final Float[] COLORS = {210.0f, 240.0f, 180.0f, 120.0f, 300.0f, 30.0f, 0.0f, 330.0f, 270.0f, 60.0f};
     Map<String, Person> people;
     Map<String, Event> events;
     Authtoken authtoken;
     Person currentPerson;
+    HashMap<String, Float> eventColors;
 
     public static DataCache getInstance(){
         return instance;
@@ -72,5 +73,25 @@ public class DataCache {
 
     public Event getEvent(String eventID){
         return events.get(eventID);
+    }
+
+    public void initEventColors(){
+        eventColors = new HashMap();
+        int colorIndex = 0;
+        for(Event event : events.values()){
+            if(!eventColors.containsKey(event.getEventType())){
+                eventColors.put(event.getEventType(), COLORS[0]);
+                if(colorIndex == COLORS.length - 1){
+                    colorIndex = 0;
+                }
+                else {
+                    colorIndex++;
+                }
+            }
+        }
+    }
+
+    public float getEventColor(String eventType){
+        return eventColors.get(eventType);
     }
 }

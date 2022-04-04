@@ -79,6 +79,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         markerDetails = view.findViewById(R.id.detailsText);
         markerIcon = view.findViewById(R.id.detailsIcon);
+        DataCache.getInstance().initEventColors();
 
         return view;
     }
@@ -90,6 +91,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
+                marker.hideInfoWindow();
                 markerDetails.setText(marker.getSnippet());
                 setIcon(marker);
                 return false;
@@ -121,7 +123,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .title(event.getEventType()));
             marker.setTag(event);
             setSnippet(marker, event);
-
+            //setMarkerColor(marker, event);
         }
     }
 
@@ -151,8 +153,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
-    private void setMarkerColor(){
-        
+    private void setMarkerColor(Marker marker, Event event){
+        float color = DataCache.getInstance().getEventColor(event.getEventType());
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(color));
     }
 
 }
