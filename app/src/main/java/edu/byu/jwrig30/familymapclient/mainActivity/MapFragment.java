@@ -123,7 +123,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .title(event.getEventType()));
             marker.setTag(event);
             setSnippet(marker, event);
-            //setMarkerColor(marker, event);
+            setMarkerColor(marker, event);
         }
     }
 

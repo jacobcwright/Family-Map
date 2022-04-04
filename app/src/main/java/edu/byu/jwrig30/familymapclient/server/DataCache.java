@@ -80,7 +80,7 @@ public class DataCache {
         int colorIndex = 0;
         for(Event event : events.values()){
             if(!eventColors.containsKey(event.getEventType())){
-                eventColors.put(event.getEventType(), COLORS[0]);
+                eventColors.put(event.getEventType(), COLORS[colorIndex]);
                 if(colorIndex == COLORS.length - 1){
                     colorIndex = 0;
                 }
