@@ -67,7 +67,7 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull FamilyMapHolder holder, int position) {
-            if(position < people.size()) {
+            if(position < people.values().size()) {
                 holder.bind((Person) people.values().toArray()[position]);
             } else {
                 holder.bind((Event) events.values().toArray()[position - people.size()]);
