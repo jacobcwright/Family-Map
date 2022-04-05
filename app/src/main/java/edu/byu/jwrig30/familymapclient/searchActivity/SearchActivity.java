@@ -31,7 +31,9 @@ public class SearchActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.RecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
 
-        FamilyMapAdapter adapter = new FamilyMapAdapter(DataCache.getInstance().getPeople(), DataCache.getInstance().getEvents());
+        Map<String, Person> people = DataCache.getInstance().getPeople();
+        Map<String, Event> events =  DataCache.getInstance().getEvents();
+        FamilyMapAdapter adapter = new FamilyMapAdapter(people, events);
         recyclerView.setAdapter(adapter);
     }
 
@@ -66,15 +68,15 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull FamilyMapHolder holder, int position) {
             if(position < people.size()) {
-                holder.bind(people.get(position));
+                holder.bind((Person) people.values().toArray()[position]);
             } else {
-                holder.bind(events.get(position - people.size()));
+                holder.bind((Event) events.values().toArray()[position - people.size()]);
             }
         }
 
         @Override
         public int getItemCount() {
-            return people.size() + events.size();
+            return people.values().size() + events.values().size();
         }
     }
 
@@ -118,12 +120,11 @@ public class SearchActivity extends AppCompatActivity {
             if(viewType == PERSON_ITEM_VIEW_TYPE) {
                 // This is were we could pass the skiResort to a ski resort detail activity
 
-                Toast.makeText(SearchActivity.this, String.format("Enjoy skiing %s!",
-                        person.getFirstName() + " " + person.getLastName()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchActivity.this, "Person", Toast.LENGTH_SHORT).show();
             } else {
                 // This is were we could pass the hikingTrail to a hiking trail detail activity
 
-                Toast.makeText(SearchActivity.this, String.format("Enjoy hiking %s. It's %s."), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchActivity.this, "Event", Toast.LENGTH_SHORT).show();
             }
         }
     }
