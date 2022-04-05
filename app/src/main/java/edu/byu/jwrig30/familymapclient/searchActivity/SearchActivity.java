@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +84,7 @@ public class SearchActivity extends AppCompatActivity {
     private class FamilyMapHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView name;
         private final TextView details;
+        private final ImageView icon;
 
         private final int viewType;
         private Person person;
@@ -97,15 +99,23 @@ public class SearchActivity extends AppCompatActivity {
             if(viewType == PERSON_ITEM_VIEW_TYPE) {
                 name = itemView.findViewById(R.id.PersonName);
                 details = null;
+                icon = itemView.findViewById(R.id.PersonIcon);
             } else {
                 name = itemView.findViewById(R.id.EventPerson);
                 details = itemView.findViewById(R.id.EventDetails);
+                icon = null;
             }
         }
 
         private void bind(Person person) {
             this.person = person;
             name.setText(person.getFirstName() + " " + person.getLastName());
+            if(person.getGender().equals("m")){
+                icon.setImageResource(R.drawable.male);
+            }
+            else{
+                icon.setImageResource(R.drawable.female);
+            }
         }
 
         private void bind(Event event) {
