@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import edu.byu.jwrig30.familymapclient.R;
+import edu.byu.jwrig30.familymapclient.personActivity.PersonActivity;
 import edu.byu.jwrig30.familymapclient.searchActivity.SearchActivity;
 import edu.byu.jwrig30.familymapclient.server.DataCache;
 import model.Event;
@@ -44,6 +46,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private GoogleMap map;
     private TextView markerDetails;
     private ImageView markerIcon;
+    private LinearLayout mapTextView;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
@@ -80,6 +83,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         markerDetails = view.findViewById(R.id.detailsText);
         markerIcon = view.findViewById(R.id.detailsIcon);
         DataCache.getInstance().initEventColors();
+        mapTextView = (LinearLayout) view.findViewById(R.id.mapTextView);
+        mapTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Person Activity", Toast.LENGTH_LONG).show();
+//                Intent person = new Intent(getActivity(), PersonActivity.class);
+//                startActivity(person);
+            }
+        });
+
 
         return view;
     }
