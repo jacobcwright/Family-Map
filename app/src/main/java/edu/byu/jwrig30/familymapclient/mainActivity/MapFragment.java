@@ -88,8 +88,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Person Activity", Toast.LENGTH_LONG).show();
-//                Intent person = new Intent(getActivity(), PersonActivity.class);
-//                startActivity(person);
+                Intent person = new Intent(getActivity(), PersonActivity.class);
+                startActivity(person);
             }
         });
 

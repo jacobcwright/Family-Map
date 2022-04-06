@@ -10,6 +10,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.byu.jwrig30.familymapclient.R;
@@ -26,8 +27,8 @@ public class PersonActivity extends AppCompatActivity {
 
         ExpandableListView lifeEvents  = findViewById(R.id.lifeEvents);
 
-        List<Event> events = (List<Event>) DataCache.getInstance().getEvents().values();
-        List<Person> people = (List<Person>) DataCache.getInstance().getPeople().values();
+        List<Event> events = new ArrayList<Event>(DataCache.getInstance().getEvents().values());
+        List<Person> people = new ArrayList<Person>(DataCache.getInstance().getPeople().values());
 
         lifeEvents.setAdapter(new ExpandableListAdapter(events, people));
 

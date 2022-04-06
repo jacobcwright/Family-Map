@@ -29,21 +29,11 @@
             android:layout_height="200dp"
             android:layout_width="match_parent"
             android:id="@+id/lifeEvents">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Life Events">
-            </TextView>
         </ExpandableListView>
         <ExpandableListView
             android:layout_height="200dp"
             android:layout_width="match_parent"
             android:id="@+id/Family">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Life Events">
-            </TextView>
         </ExpandableListView>
 
 
