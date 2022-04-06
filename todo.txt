@@ -1,0 +1,41 @@
+Main : DONE
+Login : DONE
+Map :
+     - Display Lines
+Person:
+     - Pass person object
+     - Filter & Order Life Events
+     - Filter  Family
+     - Up Button
+Event:
+     - Map Fragment
+     - Up Button
+Search:
+     - No results when initialized
+     - return results
+Settings: (color coordinated)
+  Lines
+     - Life Story
+     - Family Tree
+     - Spouse
+  Filters
+     - Father's Side
+     - Mother's Side
+     - Male Events
+     - Female Events
+  Logout
+  Up Button
+
+JUnit Tests:
+Server Proxy
+     - Login method
+     - Registering a new user
+     - Retrieving people related to a logged in/registered user
+     - Retrieving events related to a logged in/registered user
+Model
+     - Calculates family relationships (i.e., spouses, parents, children)
+     - Filters events according to the current filter settings
+     - Chronologically sorts a person’s individual events (birth first, death last, etc.)
+     - Correctly searches for people and events (for your Search Activity)
+
+
