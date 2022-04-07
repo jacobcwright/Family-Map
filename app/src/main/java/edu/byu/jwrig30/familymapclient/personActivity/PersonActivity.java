@@ -2,7 +2,9 @@ package edu.byu.jwrig30.familymapclient.personActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -16,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.byu.jwrig30.familymapclient.R;
+import edu.byu.jwrig30.familymapclient.mainActivity.MainActivity;
+import edu.byu.jwrig30.familymapclient.searchActivity.SearchActivity;
 import edu.byu.jwrig30.familymapclient.server.DataCache;
 import model.Event;
 import model.Person;
@@ -49,6 +53,21 @@ public class PersonActivity extends AppCompatActivity {
         people = DataCache.getInstance().getFamilyForPerson(personID);
 
         lifeEvents.setAdapter(new ExpandableListAdapter(events, new ArrayList<Person>(people.keySet())));
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 

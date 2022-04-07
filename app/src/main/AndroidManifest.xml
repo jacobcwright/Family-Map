@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".eventActivity.EventActivity"
+            android:parentActivityName=".mainActivity.MainActivity"
             android:exported="false" />
 
         <meta-data
@@ -25,9 +26,11 @@
 
         <activity
             android:name=".personActivity.PersonActivity"
+            android:parentActivityName=".mainActivity.MainActivity"
             android:exported="false" />
         <activity
             android:name=".searchActivity.SearchActivity"
+            android:parentActivityName=".mainActivity.MainActivity"
             android:exported="false" />
         <activity
             android:name=".mainActivity.MainActivity"
@@ -38,9 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".searchActivity.SearchActivity"
-            android:exported="false"></activity>
     </application>
 
 </manifest>

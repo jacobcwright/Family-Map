@@ -3,8 +3,6 @@ Login : DONE
 Map :
      - Display Lines
 Person:
-     - Filter  Family
-     - Up Button
      - Switch to eventActivity onclick
      - Switch to PersonActivity onclick
 Event:
