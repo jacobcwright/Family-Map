@@ -43,7 +43,7 @@ public class PersonActivity extends AppCompatActivity {
         gender.setText(person.getGender().equals("m") ? "Male" : "Female");
 
 
-        List<Event> events = new ArrayList<Event>(DataCache.getInstance().getEvents().values());
+        List<Event> events = DataCache.getInstance().getEventsForPerson(personID);
         List<Person> people = new ArrayList<Person>(DataCache.getInstance().getPeople().values());
 
         lifeEvents.setAdapter(new ExpandableListAdapter(events, people));

@@ -3,6 +3,7 @@ package edu.byu.jwrig30.familymapclient.server;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 import model.Authtoken;
 import model.Event;
@@ -89,6 +90,29 @@ public class DataCache {
                 }
             }
         }
+    }
+
+    public ArrayList<Event> getEventsForPerson(String personID){
+        ArrayList<Event> personEvents = new ArrayList<Event>();
+        for (Event event : events.values()) {
+            if(event.getPersonID().equals(personID)){
+                if(event.getEventType().toLowerCase().equals("birth")){
+                    personEvents.add(0, event);
+                }
+                else {
+                    personEvents.add(event);
+                }
+            }
+        }
+
+        return personEvents;
+    }
+
+    public TreeSet<Person> getFamilyForPerson(String personID){
+        TreeSet<Person> family = new TreeSet<>();
+
+
+        return family;
     }
 
     public float getEventColor(String eventType){
