@@ -1,6 +1,10 @@
 package edu.byu.jwrig30.familymapclient.server;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
@@ -108,11 +112,96 @@ public class DataCache {
         return personEvents;
     }
 
-    public TreeSet<Person> getFamilyForPerson(String personID){
-        TreeSet<Person> family = new TreeSet<>();
-
-
+    public HashMap<Person, String> getFamilyForPerson(String personID){
+        // breadth-first search so we can use list for simplicity
+        HashMap<Person, String> family = new HashMap<>();
+        Person root = getPerson(personID);
+        getParents(family, root, 1);
+        getSpouse(family, root);
         return family;
+    }
+
+    private void getSpouse(HashMap<Person, String> family, Person currentPerson) {
+        String spouseID = currentPerson.getSpouseID();
+        if(spouseID != null){
+            Person spouse = getPerson(spouseID);
+            if(spouse != null) {
+                family.put(spouse, "Spouse");
+            }
+        }
+    }
+
+    private void getParents(HashMap<Person, String> family, Person currentPerson, int generations) {
+        Person father = getFather(currentPerson);
+        if (father != null) {
+            family.put(father, getRelationship(generations, "m"));
+        }
+        Person mother = getMother(currentPerson);
+        if (mother != null) {
+            family.put(mother, getRelationship(generations, "f"));
+        }
+        if (father!= null){
+            getParents(family, father, generations+1);
+        }
+        if (mother != null){
+            getParents(family, mother, generations+1);
+        }
+    }
+
+    private Person getFather(Person currentPerson){
+        Person father = null;
+        String fatherID = currentPerson.getFatherID();
+        if(fatherID != null){
+            father = getPerson(fatherID);
+        }
+        return father;
+    }
+
+    private Person getMother(Person currentPerson){
+        Person mother = null;
+        String motherID = currentPerson.getMotherID();
+        if(motherID != null){
+            mother = getPerson(motherID);
+        }
+        return mother;
+    }
+
+    private String getRelationship(int generations, String gender){
+        switch(gender) {
+            case "m":
+                if(generations >= 5) return "Great...Grandfather";
+                switch (generations) {
+                    case 1:
+                        return "Father";
+                    case 2:
+                        return "Grandfather";
+                    case 3:
+                        return "Great-Grandfather";
+                    case 4:
+                        return "Great-Great-Grandfather";
+                    default:
+                        System.out.println("BAD ARGUMENT");
+                        return "BAD ARGUMENT";
+                }
+            case "f":
+                if(generations >= 5) return "Great...Grandmother";
+                switch (generations) {
+                    case 1:
+                        return "Mother";
+                    case 2:
+                        return "Grandmother";
+                    case 3:
+                        return "Great-Grandmother";
+                    case 4:
+                        return "Great-Great-Grandmother";
+                    default:
+                        System.out.println("BAD ARGUMENT");
+                        return "BAD ARGUMENT";
+                }
+            default:
+                return "BAD ARGUMENT";
+
+        }
     }
 
     public float getEventColor(String eventType){

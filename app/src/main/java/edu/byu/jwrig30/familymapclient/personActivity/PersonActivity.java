@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import edu.byu.jwrig30.familymapclient.R;
@@ -24,6 +25,7 @@ public class PersonActivity extends AppCompatActivity {
     TextView firstName;
     TextView lastName;
     TextView gender;
+    HashMap<Person, String> people;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +46,9 @@ public class PersonActivity extends AppCompatActivity {
 
 
         List<Event> events = DataCache.getInstance().getEventsForPerson(personID);
-        List<Person> people = new ArrayList<Person>(DataCache.getInstance().getPeople().values());
+        people = DataCache.getInstance().getFamilyForPerson(personID);
 
-        lifeEvents.setAdapter(new ExpandableListAdapter(events, people));
+        lifeEvents.setAdapter(new ExpandableListAdapter(events, new ArrayList<Person>(people.keySet())));
 
     }
 
@@ -174,9 +176,7 @@ public class PersonActivity extends AppCompatActivity {
             nameView.setText(family.get(childPosition).getFirstName() + " " + family.get(childPosition).getLastName());
 
             TextView relationshipView = personView.findViewById(R.id.Relationship);
-//          Person person = DataCache.getInstance().getPerson();
-//          relationshipView.setText(family.get(childPosition).getRelationship(person));
-            relationshipView.setText("Insert Relationship");
+            relationshipView.setText(people.get(family.get(childPosition)));
 
             personView.setOnClickListener(new View.OnClickListener() {
                 @Override
