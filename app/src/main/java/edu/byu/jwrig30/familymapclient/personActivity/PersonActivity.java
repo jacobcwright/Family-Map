@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -165,6 +166,10 @@ public class PersonActivity extends AppCompatActivity {
         }
 
         private void initializePersonView(View personView, final int childPosition) {
+            ImageView icon = personView.findViewById(R.id.FamilyIcon);
+            if(family.get(childPosition).getGender().equals("f")){
+                icon.setImageResource(R.drawable.female);
+            }
             TextView nameView = personView.findViewById(R.id.PersonName);
             nameView.setText(family.get(childPosition).getFirstName() + " " + family.get(childPosition).getLastName());
 
