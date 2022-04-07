@@ -19,6 +19,10 @@ import model.Event;
 import model.Person;
 
 public class PersonActivity extends AppCompatActivity {
+    Person person;
+    TextView firstName;
+    TextView lastName;
+    TextView gender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,17 @@ public class PersonActivity extends AppCompatActivity {
         setContentView(R.layout.activity_person);
 
         ExpandableListView lifeEvents  = findViewById(R.id.lifeEvents);
+
+        String personID = getIntent().getExtras().getString("Person");
+        person = DataCache.getInstance().getPerson(personID);
+
+        firstName = this.findViewById(R.id.FirstName);
+        firstName.setText(person.getFirstName());
+        lastName = this.findViewById(R.id.LastName);
+        lastName.setText(person.getLastName());
+        gender = this.findViewById(R.id.Gender);
+        gender.setText(person.getGender().equals("m") ? "Male" : "Female");
+
 
         List<Event> events = new ArrayList<Event>(DataCache.getInstance().getEvents().values());
         List<Person> people = new ArrayList<Person>(DataCache.getInstance().getPeople().values());

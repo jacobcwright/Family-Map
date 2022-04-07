@@ -47,6 +47,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private TextView markerDetails;
     private ImageView markerIcon;
     private LinearLayout mapTextView;
+    private String clickedPersonID;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
@@ -80,6 +81,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapFragment.getMapAsync(this);
         setHasOptionsMenu(true);
 
+        clickedPersonID = null;
         markerDetails = view.findViewById(R.id.detailsText);
         markerIcon = view.findViewById(R.id.detailsIcon);
         DataCache.getInstance().initEventColors();
@@ -89,6 +91,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Person Activity", Toast.LENGTH_LONG).show();
                 Intent person = new Intent(getActivity(), PersonActivity.class);
+                person.putExtra("Person", clickedPersonID);
                 startActivity(person);
             }
         });
@@ -101,18 +104,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMapLoadedCallback(this);
+        addEvents();
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
                 marker.hideInfoWindow();
+                clickedPersonID = ((Event) marker.getTag()).getPersonID();
                 markerDetails.setText(marker.getSnippet());
                 setIcon(marker);
                 return false;
             }
         });
 
-        // add event markers
-        addEvents();
     }
 
     @Override
