@@ -2,10 +2,8 @@ Main : DONE
 Login : DONE
 Map :
      - Display Lines
-Person:
-    - DONE
+Person: DONE
 Event:
-     - Display Event
      - Display Lines
 Search:
      - No results when initialized

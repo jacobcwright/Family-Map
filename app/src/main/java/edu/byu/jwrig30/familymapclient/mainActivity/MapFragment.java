@@ -48,11 +48,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private ImageView markerIcon;
     private LinearLayout mapTextView;
     private String clickedPersonID;
+    private String clickedEventID;
     private boolean eventClicked;
+    private Marker clickedMarker;
 
     public MapFragment() {}
 
     public MapFragment(String eventID) {
+        clickedEventID = eventID;
         eventClicked = (eventID != null);
     }
 
@@ -117,14 +120,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
-                marker.hideInfoWindow();
-                clickedPersonID = ((Event) marker.getTag()).getPersonID();
-                markerDetails.setText(marker.getSnippet());
-                setIcon(marker);
+                markerClick(marker);
                 return false;
             }
         });
-
+        if(clickedMarker != null){
+            map.moveCamera(CameraUpdateFactory.newLatLng(clickedMarker.getPosition()));
+            markerClick(clickedMarker);
+        }
     }
 
     @Override
@@ -149,6 +152,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             marker.setTag(event);
             setSnippet(marker, event);
             setMarkerColor(marker, event);
+            if(event.getEventID().equals(this.clickedEventID)){
+                clickedMarker = marker;
+            }
         }
     }
 
@@ -181,6 +187,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private void setMarkerColor(Marker marker, Event event){
         float color = DataCache.getInstance().getEventColor(event.getEventType());
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(color));
+    }
+
+    private void markerClick(Marker marker){
+        marker.showInfoWindow();
+        clickedPersonID = ((Event) marker.getTag()).getPersonID();
+        markerDetails.setText(marker.getSnippet());
+        setIcon(marker);
     }
 
 }
