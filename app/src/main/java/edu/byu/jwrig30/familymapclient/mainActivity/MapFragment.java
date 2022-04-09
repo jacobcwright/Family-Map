@@ -98,8 +98,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         setHasOptionsMenu(true);
 
         clickedPersonID = null;
-        clickedEventID = null;
-        eventClicked = false;
         clickedMarker = null;
         lines = new ArrayList<>();
         markerDetails = view.findViewById(R.id.detailsText);
