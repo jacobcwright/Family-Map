@@ -16,9 +16,14 @@
         android:theme="@style/Theme.FamilyMapClient"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".settingsActivity.SettingsActivity"
+            android:exported="false"
+            android:label="@string/settings_title"
+            android:parentActivityName=".mainActivity.MainActivity"/>
+        <activity
             android:name=".eventActivity.EventActivity"
-            android:parentActivityName=".mainActivity.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".mainActivity.MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -26,12 +31,12 @@
 
         <activity
             android:name=".personActivity.PersonActivity"
-            android:parentActivityName=".mainActivity.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".mainActivity.MainActivity" />
         <activity
             android:name=".searchActivity.SearchActivity"
-            android:parentActivityName=".mainActivity.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".mainActivity.MainActivity" />
         <activity
             android:name=".mainActivity.MainActivity"
             android:exported="true">

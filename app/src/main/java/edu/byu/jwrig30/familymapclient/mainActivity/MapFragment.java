@@ -1,6 +1,10 @@
 package edu.byu.jwrig30.familymapclient.mainActivity;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -41,6 +45,7 @@ import edu.byu.jwrig30.familymapclient.R;
 import edu.byu.jwrig30.familymapclient.personActivity.PersonActivity;
 import edu.byu.jwrig30.familymapclient.searchActivity.SearchActivity;
 import edu.byu.jwrig30.familymapclient.server.DataCache;
+import edu.byu.jwrig30.familymapclient.settingsActivity.SettingsActivity;
 import model.Event;
 import model.Person;
 
@@ -55,6 +60,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private boolean eventClicked;
     private Marker clickedMarker;
     private ArrayList<Polyline> lines;
+    private boolean lifeLines;
+    private boolean familyLines;
+    private boolean spouseLines;
+    private boolean paternalFilter;
+    private boolean maternalFilter;
+    private boolean maleEvents;
+    private boolean femaleEvents;
 
     public MapFragment() {}
 
@@ -82,6 +94,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 return true;
             case R.id.settings:
                 Toast.makeText(getActivity(), "Setting", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -122,6 +136,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMapLoadedCallback(this);
+        SharedPreferences shared = getContext().getSharedPreferences("Settings", MODE_PRIVATE);
+        String channel = (shared.getString("life", ""));
         addEvents();
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
