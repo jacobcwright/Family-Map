@@ -207,8 +207,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void drawLines(Marker marker){
          drawSpouseLines(marker);
+         drawLifeLines(marker);
         // drawFamilyLines(marker);
-        // drawLifeLines(marker);
     }
 
     private void drawSpouseLines(Marker marker) {
@@ -222,6 +222,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .add(new LatLng(event.getLatitude(),event.getLongitude()), new LatLng(spouseBirth.getLatitude(),spouseBirth.getLongitude())));
         line.setColor(Color.WHITE);
         lines.add(line);
+
+    }
+
+    private void drawLifeLines(Marker marker){
+        DataCache data = DataCache.getInstance();
+        Event event = (Event) marker.getTag();
+        Person currentPerson = data.getPerson(event.getPersonID());
+        ArrayList<Event> lifeEvents = data.getEventsForPerson(currentPerson.getPersonID());
+
+        for(int i = 0; i < lifeEvents.size() - 1; i++){
+            Polyline line  = map.addPolyline(new PolylineOptions()
+                    .add(new LatLng(lifeEvents.get(i).getLatitude(),lifeEvents.get(i).getLongitude()),
+                            new LatLng(lifeEvents.get(i+1).getLatitude(),lifeEvents.get(i+1).getLongitude())));
+            line.setColor(Color.YELLOW);
+            lines.add(line);
+        }
 
     }
 
