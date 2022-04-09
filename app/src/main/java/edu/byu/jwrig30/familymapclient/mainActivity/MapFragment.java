@@ -200,7 +200,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         clickedPersonID = ((Event) marker.getTag()).getPersonID();
         markerDetails.setText(marker.getSnippet());
         setIcon(marker);
+        removeLines();
         drawLines(marker);
+
     }
 
     private void drawLines(Marker marker){
@@ -221,6 +223,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         line.setColor(Color.WHITE);
         lines.add(line);
 
+    }
+
+    private void removeLines(){
+        for(Polyline line : lines){
+            line.remove();
+        }
+        lines.clear();
     }
 
 }
