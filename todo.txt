@@ -1,17 +1,13 @@
 Main : DONE
 Login : DONE
-Map :
-     - Display Life Lines
-     - Display Family Lines
+Map : DONE
 Person: DONE
 Event: DONE
 Search:
      - No results when initialized
      - return results
-Settings: (color coordinated)
-  Lines
-     - Life Story
-     - Family Tree
+Settings:
+  Lines : DONE
   Filters
      - Father's Side
      - Mother's Side

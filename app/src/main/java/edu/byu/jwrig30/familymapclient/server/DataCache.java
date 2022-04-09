@@ -77,6 +77,7 @@ public class DataCache {
     }
 
     public Person getPerson(String personID){
+        assert(people != null);
         return people.get(personID);
     }
 
@@ -88,8 +89,8 @@ public class DataCache {
         eventColors = new HashMap();
         int colorIndex = 0;
         for(Event event : events.values()){
-            if(!eventColors.containsKey(event.getEventType())){
-                eventColors.put(event.getEventType(), COLORS[colorIndex]);
+            if(!eventColors.containsKey(event.getEventType().toLowerCase())){
+                eventColors.put(event.getEventType().toLowerCase(), COLORS[colorIndex]);
                 if(colorIndex == COLORS.length - 1){
                     colorIndex = 0;
                 }
@@ -131,6 +132,39 @@ public class DataCache {
         getParents(family, root, 1);
         getSpouse(family, root);
         return family;
+    }
+
+    public HashMap<Person, String> getImmediateFamily(String personID){
+        HashMap<Person, String> family = new HashMap<>();
+        Person root = getPerson(personID);
+        getSpouse(family, root);
+        Person mother = getMother(root);
+        if(mother != null){
+            family.put(getMother(root),"Mother");
+        }
+        Person father = getFather(root);
+        if(father != null){
+            family.put(getFather(root),"Father");
+        }
+        getChildren(family, root);
+        return family;
+    }
+
+    private void getChildren(HashMap<Person, String> family, Person root) {
+        for(Person p : people.values()){
+            if(root.getGender().equals("m")){
+                if(p.getFatherID() == null) continue;
+                if(p.getFatherID().equals(root.getPersonID())){
+                    family.put(p, "Child");
+                }
+            }
+            else if(root.getGender().equals("f")){
+                if(p.getMotherID() == null) continue;
+                if(p.getMotherID().equals(root.getPersonID())){
+                    family.put(p, "Child");
+                }
+            }
+        }
     }
 
     private void getSpouse(HashMap<Person, String> family, Person currentPerson) {
@@ -217,6 +251,14 @@ public class DataCache {
     }
 
     public float getEventColor(String eventType){
-        return eventColors.get(eventType);
+        return eventColors.get(eventType.toLowerCase());
+    }
+
+    public ArrayList<Person> getPeopleSearch(String searchString) {
+        return null;
+    }
+
+    public ArrayList<Event> getEventSearch(String searchString) {
+        return null;
     }
 }

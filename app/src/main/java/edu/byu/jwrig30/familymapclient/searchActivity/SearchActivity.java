@@ -5,17 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import edu.byu.jwrig30.familymapclient.R;
+import edu.byu.jwrig30.familymapclient.mainActivity.MainActivity;
 import edu.byu.jwrig30.familymapclient.server.DataCache;
 import model.Event;
 import model.Person;
@@ -23,6 +31,9 @@ import model.Person;
 public class SearchActivity extends AppCompatActivity {
     private static final int PERSON_ITEM_VIEW_TYPE = 0;
     private static final int EVENT_ITEM_VIEW_TYPE = 1;
+    private Button searchButton;
+    private EditText searchText;
+    private String searchString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +42,45 @@ public class SearchActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.RecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
+        searchText = findViewById(R.id.search);
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchString = charSequence.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+        searchButton = findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchResults();
+            }
+        });
 
         Map<String, Person> people = DataCache.getInstance().getPeople();
         Map<String, Event> events =  DataCache.getInstance().getEvents();
         FamilyMapAdapter adapter = new FamilyMapAdapter(people, events);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class FamilyMapAdapter extends RecyclerView.Adapter<FamilyMapHolder> {
@@ -137,5 +182,10 @@ public class SearchActivity extends AppCompatActivity {
                 Toast.makeText(SearchActivity.this, "Event", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void searchResults(){
+        ArrayList<Person> people = DataCache.getInstance().getPeopleSearch(this.searchString);
+        ArrayList<Event> events = DataCache.getInstance().getEventSearch(this.searchString);
     }
 }

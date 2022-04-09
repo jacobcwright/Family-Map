@@ -51,8 +51,7 @@ public class PersonActivity extends AppCompatActivity {
 
 
         List<Event> events = DataCache.getInstance().getEventsForPerson(personID);
-        people = DataCache.getInstance().getFamilyForPerson(personID);
-
+        people = DataCache.getInstance().getImmediateFamily(personID);
         lifeEvents.setAdapter(new ExpandableListAdapter(events, new ArrayList<Person>(people.keySet())));
 
     }
