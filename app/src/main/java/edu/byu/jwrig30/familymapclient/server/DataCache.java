@@ -1,6 +1,10 @@
 package edu.byu.jwrig30.familymapclient.server;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,19 +100,27 @@ public class DataCache {
         }
     }
 
+    @SuppressLint("NewApi")
     public ArrayList<Event> getEventsForPerson(String personID){
         ArrayList<Event> personEvents = new ArrayList<Event>();
         for (Event event : events.values()) {
             if(event.getPersonID().equals(personID)){
-                if(event.getEventType().toLowerCase().equals("birth")){
-                    personEvents.add(0, event);
-                }
-                else {
                     personEvents.add(event);
-                }
             }
         }
 
+        personEvents.sort(new Comparator<Event>() {
+            @Override
+            public int compare(Event t1, Event t2) {
+                if(t1.getYear() <= t2.getYear()){
+                    return -1;
+                }
+                else if(t1.getYear() > t2.getYear()){
+                    return 1;
+                }
+                else return 0;
+            }
+        });
         return personEvents;
     }
 
