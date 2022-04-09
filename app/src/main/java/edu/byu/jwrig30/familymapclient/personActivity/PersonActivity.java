@@ -69,7 +69,6 @@ public class PersonActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     private class ExpandableListAdapter extends BaseExpandableListAdapter{

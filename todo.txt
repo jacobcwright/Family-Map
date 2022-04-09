@@ -3,8 +3,7 @@ Login : DONE
 Map :
      - Display Lines
 Person:
-     - Switch to eventActivity onclick
-     - Switch to PersonActivity onclick
+    - order life events
 Event:
      - Map Fragment
      - Up Button
