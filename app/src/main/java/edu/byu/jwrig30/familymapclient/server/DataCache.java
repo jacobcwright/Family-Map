@@ -29,6 +29,13 @@ public class DataCache {
     Authtoken authtoken;
     Person currentPerson;
     HashMap<String, Float> eventColors;
+    private boolean lifeLines;
+    private boolean familyLines;
+    private boolean spouseLines;
+    private boolean paternalFilter;
+    private boolean maternalFilter;
+    private boolean maleEvents;
+    private boolean femaleEvents;
 
     public static DataCache getInstance(){
         return instance;
@@ -275,5 +282,16 @@ public class DataCache {
             }
         }
         return result;
+    }
+
+    public void setPreferences(boolean lifeLines, boolean familyLines, boolean spouseLines,
+                               boolean paternalFilter, boolean maternalFilter, boolean maleEvents, boolean femaleEvents){
+        this.lifeLines = lifeLines;
+        this.familyLines = familyLines;
+        this.spouseLines = spouseLines;
+        this.paternalFilter = paternalFilter;
+        this.maternalFilter = maternalFilter;
+        this.maleEvents = maleEvents;
+        this.femaleEvents = femaleEvents;
     }
 }

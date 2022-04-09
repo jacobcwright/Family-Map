@@ -13,6 +13,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,14 +62,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private boolean eventClicked;
     private Marker clickedMarker;
     private ArrayList<Polyline> lines;
-    private boolean lifeLines;
-    private boolean familyLines;
-    private boolean spouseLines;
-    private boolean paternalFilter;
-    private boolean maternalFilter;
-    private boolean maleEvents;
-    private boolean femaleEvents;
-
     public MapFragment() {}
 
     public MapFragment(String eventID) {
@@ -136,8 +130,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMapLoadedCallback(this);
-        SharedPreferences shared = getContext().getSharedPreferences("Settings", MODE_PRIVATE);
-        String channel = (shared.getString("life", ""));
+        SharedPreferences pref = getActivity().getPreferences(MODE_PRIVATE);
+        Map<String, Boolean> prefMap = (Map<String, Boolean>) pref.getAll();
         addEvents();
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
