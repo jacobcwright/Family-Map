@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.byu.jwrig30.familymapclient.R;
+import edu.byu.jwrig30.familymapclient.eventActivity.EventActivity;
 import edu.byu.jwrig30.familymapclient.mainActivity.MainActivity;
 import edu.byu.jwrig30.familymapclient.searchActivity.SearchActivity;
 import edu.byu.jwrig30.familymapclient.server.DataCache;
@@ -182,6 +183,9 @@ public class PersonActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(PersonActivity.this, "clicked on event", Toast.LENGTH_SHORT).show();
+                    Intent event = new Intent(PersonActivity.this, EventActivity.class);
+                    event.putExtra("Event", events.get(childPosition).getEventID());
+                    startActivity(event);
                 }
             });
         }
@@ -200,7 +204,9 @@ public class PersonActivity extends AppCompatActivity {
             personView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(PersonActivity.this, "clicked on person", Toast.LENGTH_SHORT).show();
+                    Intent person = new Intent(PersonActivity.this, PersonActivity.class);
+                    person.putExtra("Person", family.get(childPosition).getPersonID());
+                    startActivity(person);
                 }
             });
         }
@@ -210,4 +216,5 @@ public class PersonActivity extends AppCompatActivity {
             return true;
         }
     }
+
 }
