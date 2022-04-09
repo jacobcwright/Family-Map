@@ -3,6 +3,7 @@ package edu.byu.jwrig30.familymapclient.mainActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -51,6 +54,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private String clickedEventID;
     private boolean eventClicked;
     private Marker clickedMarker;
+    private ArrayList<Polyline> lines;
 
     public MapFragment() {}
 
@@ -94,6 +98,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         setHasOptionsMenu(true);
 
         clickedPersonID = null;
+        clickedEventID = null;
+        eventClicked = false;
+        clickedMarker = null;
+        lines = new ArrayList<>();
         markerDetails = view.findViewById(R.id.detailsText);
         markerIcon = view.findViewById(R.id.detailsIcon);
         DataCache.getInstance().initEventColors();
@@ -194,6 +202,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         clickedPersonID = ((Event) marker.getTag()).getPersonID();
         markerDetails.setText(marker.getSnippet());
         setIcon(marker);
+        drawLines(marker);
+    }
+
+    private void drawLines(Marker marker){
+         drawSpouseLines(marker);
+        // drawFamilyLines(marker);
+        // drawLifeLines(marker);
+    }
+
+    private void drawSpouseLines(Marker marker) {
+        DataCache data = DataCache.getInstance();
+        Event event = (Event) marker.getTag();
+        Person currentPerson = data.getPerson(event.getPersonID());
+        Person spouse = data.getPerson(currentPerson.getSpouseID());
+        Event spouseBirth = data.getEventsForPerson(spouse.getPersonID()).get(0);
+
+        Polyline line  = map.addPolyline(new PolylineOptions()
+                .add(new LatLng(event.getLatitude(),event.getLongitude()), new LatLng(spouseBirth.getLatitude(),spouseBirth.getLongitude())));
+        line.setColor(Color.WHITE);
+        lines.add(line);
+
     }
 
 }
