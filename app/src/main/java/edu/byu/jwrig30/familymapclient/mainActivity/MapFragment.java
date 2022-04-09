@@ -145,6 +145,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // map.setOnMapLoadedCallback(...) above) to here.
     }
 
+    /**
+     * Adds all events to the map
+     */
     private void addEvents(){
         DataCache data = DataCache.getInstance();
         ///Person user = data.getCurrentPerson();
@@ -164,6 +167,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+    /**
+     * Set snippet to grab for event details for the textview
+     * @param marker
+     * @param event
+     */
     private void setSnippet(Marker marker, Event event){
         StringBuilder sb = new StringBuilder();
         Person person = DataCache.getInstance().getPerson(event.getPersonID());
@@ -174,6 +182,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         marker.setSnippet(sb.toString());
     }
 
+    /**
+     * Set gender specific icon
+     * @param marker
+     */
     private void setIcon(Marker marker){
         DataCache data = DataCache.getInstance();
         Event e = (Event) marker.getTag();
@@ -195,6 +207,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(color));
     }
 
+    /**
+     * Actions to run when a marker is clicked
+     * @param marker
+     */
     private void markerClick(Marker marker){
         marker.showInfoWindow();
         clickedPersonID = ((Event) marker.getTag()).getPersonID();
@@ -205,16 +221,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     }
 
+    /**
+     * Draws all lines
+     * @param marker
+     */
     private void drawLines(Marker marker){
          drawSpouseLines(marker);
          drawLifeLines(marker);
-        // drawFamilyLines(marker);
+        drawFamilyLines(marker);
     }
 
+    /**
+     * Draws a line to the earliest event of their spouse
+     * @param marker
+     */
     private void drawSpouseLines(Marker marker) {
         DataCache data = DataCache.getInstance();
         Event event = (Event) marker.getTag();
         Person currentPerson = data.getPerson(event.getPersonID());
+        if(currentPerson.getSpouseID() == null) return;
         Person spouse = data.getPerson(currentPerson.getSpouseID());
         Event spouseBirth = data.getEventsForPerson(spouse.getPersonID()).get(0);
 
@@ -225,6 +250,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     }
 
+    /**
+     * Draws lines for events in person's life chronologically
+     * @param marker
+     */
     private void drawLifeLines(Marker marker){
         DataCache data = DataCache.getInstance();
         Event event = (Event) marker.getTag();
@@ -238,7 +267,62 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             line.setColor(Color.YELLOW);
             lines.add(line);
         }
+    }
 
+    /**
+     * Draws lines for person's family tree relatives birth events.
+     * @param marker
+     */
+    private void drawFamilyLines(Marker marker){
+        DataCache data = DataCache.getInstance();
+        Event event = (Event) marker.getTag();
+        Person currentPerson = data.getPerson(event.getPersonID());
+        drawParentsLine(currentPerson, event, 0);
+    }
+
+    private void drawParentsLine(Person currentPerson, Event currentEvent, int generation){
+        if(currentPerson.getFatherID() != null){
+            drawFatherLine(currentPerson, currentEvent, generation);
+        }
+        if(currentPerson.getMotherID() != null){
+            drawMotherLine(currentPerson, currentEvent, generation);
+        }
+    }
+
+    private void drawFatherLine(Person currentPerson, Event currentEvent, int generation){
+        if(currentPerson.getFatherID() == null) return;
+
+        DataCache data = DataCache.getInstance();
+        Person father = data.getPerson(currentPerson.getFatherID());
+        Event fatherBirth = data.getEventsForPerson(father.getPersonID()).get(0);
+
+        Polyline line  = map.addPolyline(new PolylineOptions()
+                .add(new LatLng(currentEvent.getLatitude(),currentEvent.getLongitude()),
+                        new LatLng(fatherBirth.getLatitude(),fatherBirth.getLongitude())));
+        line.setColor(Color.GREEN);
+        // decrease width by 3 for every generation starting at 15, but if past 5 generations, set width to 1
+        line.setWidth((15 - (generation * 3)) > 0 ? (15 - (generation * 3)) : 1);
+        lines.add(line);
+
+        drawParentsLine(father, fatherBirth, generation+1);
+    }
+
+    private void drawMotherLine(Person currentPerson, Event currentEvent, int generation){
+        if(currentPerson.getMotherID() == null) return;
+
+        DataCache data = DataCache.getInstance();
+        Person mother = data.getPerson(currentPerson.getMotherID());
+        Event motherBirth = data.getEventsForPerson(mother.getPersonID()).get(0);
+
+        Polyline line  = map.addPolyline(new PolylineOptions()
+                .add(new LatLng(currentEvent.getLatitude(),currentEvent.getLongitude()),
+                        new LatLng(motherBirth.getLatitude(),motherBirth.getLongitude())));
+        line.setColor(Color.GREEN);
+        // decrease width by 3 for every generation starting at 15, but if past 5 generations, set width to 1
+        line.setWidth((15 - (generation * 3)) > 0 ? (15 - (generation * 3)) : 1);
+        lines.add(line);
+
+        drawParentsLine(mother, motherBirth, generation+1);
     }
 
     private void removeLines(){
