@@ -3,9 +3,7 @@ Login : DONE
 Map : DONE
 Person: DONE
 Event: DONE
-Search:
-     - No results when initialized
-     - return results
+Search: DONE
 Settings:
   Lines : DONE
   Filters

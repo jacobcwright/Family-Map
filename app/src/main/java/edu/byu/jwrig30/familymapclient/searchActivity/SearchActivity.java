@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import edu.byu.jwrig30.familymapclient.R;
+import edu.byu.jwrig30.familymapclient.eventActivity.EventActivity;
 import edu.byu.jwrig30.familymapclient.mainActivity.MainActivity;
+import edu.byu.jwrig30.familymapclient.personActivity.PersonActivity;
 import edu.byu.jwrig30.familymapclient.server.DataCache;
 import model.Event;
 import model.Person;
@@ -174,13 +176,13 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if(viewType == PERSON_ITEM_VIEW_TYPE) {
-                // This is were we could pass the skiResort to a ski resort detail activity
-
-                Toast.makeText(SearchActivity.this, "Person", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SearchActivity.this, PersonActivity.class);
+                intent.putExtra("Person", person.getPersonID());
+                startActivity(intent);
             } else {
-                // This is were we could pass the hikingTrail to a hiking trail detail activity
-
-                Toast.makeText(SearchActivity.this, "Event", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SearchActivity.this, EventActivity.class);
+                intent.putExtra("Event", event.getEventID());
+                startActivity(intent);
             }
         }
     }
