@@ -1,20 +1,11 @@
 package edu.byu.jwrig30.familymapclient.mainActivity;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.Preference;
-import androidx.preference.SwitchPreferenceCompat;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -40,7 +30,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.byu.jwrig30.familymapclient.R;
@@ -62,6 +52,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private boolean eventClicked;
     private Marker clickedMarker;
     private ArrayList<Polyline> lines;
+    private ArrayList<Marker> markers;
     public MapFragment() {}
 
     public MapFragment(String eventID) {
@@ -130,8 +121,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMapLoadedCallback(this);
-        SharedPreferences pref = getActivity().getPreferences(MODE_PRIVATE);
-        Map<String, Boolean> prefMap = (Map<String, Boolean>) pref.getAll();
         addEvents();
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -155,14 +144,54 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // map.setOnMapLoadedCallback(...) above) to here.
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (map != null) {
+            if (markers != null) {
+                mapClear();
+            }
+            addEvents();
+            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    markerClick(marker);
+                    return false;
+                }
+            });
+            if (clickedMarker != null) {
+                map.moveCamera(CameraUpdateFactory.newLatLng(clickedMarker.getPosition()));
+                markerClick(clickedMarker);
+            }
+        }
+    }
+
+    private void mapClear() {
+        for (Marker m : markers){
+            m.remove();
+        }
+        markers.clear();
+    }
+
     /**
      * Adds all events to the map
      */
     private void addEvents(){
         DataCache data = DataCache.getInstance();
         ///Person user = data.getCurrentPerson();
-        Map<String, Event> events = data.getEvents();
-
+        Map<String, Event> events = new HashMap<>();
+        if(data.isFemaleEvents() && data.isMaleEvents()){
+           events = data.getEvents();
+        }
+        else if(!data.isFemaleEvents() && data.isMaleEvents()){
+            events = data.getMaleEvents();
+        }
+        else if(data.isFemaleEvents() && !data.isMaleEvents()){
+            events = data.getFemaleEvents();
+        }
+        else {
+            return;
+        }
         for(Event event : events.values()){
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
             Marker marker = map.addMarker(new MarkerOptions()
@@ -228,7 +257,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         setIcon(marker);
         removeLines();
         drawLines(marker);
-
     }
 
     /**
@@ -236,9 +264,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
      * @param marker
      */
     private void drawLines(Marker marker){
-         drawSpouseLines(marker);
-         drawLifeLines(marker);
-        drawFamilyLines(marker);
+        DataCache data = DataCache.getInstance();
+        if(data.isSpouseLines()){
+            drawSpouseLines(marker);
+        }
+        if(data.isLifeLines()){
+            drawLifeLines(marker);
+        }
+        if(data.isFamilyLines()){
+            drawFamilyLines(marker);
+        }
     }
 
     /**

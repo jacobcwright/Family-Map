@@ -1,17 +1,11 @@
 package edu.byu.jwrig30.familymapclient.server;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeSet;
 
 import model.Authtoken;
 import model.Event;
@@ -29,13 +23,13 @@ public class DataCache {
     Authtoken authtoken;
     Person currentPerson;
     HashMap<String, Float> eventColors;
-    private boolean lifeLines;
-    private boolean familyLines;
-    private boolean spouseLines;
-    private boolean paternalFilter;
-    private boolean maternalFilter;
-    private boolean maleEvents;
-    private boolean femaleEvents;
+    private boolean lifeLines = true;
+    private boolean familyLines = true;
+    private boolean spouseLines = true;
+    private boolean paternalFilter = true;
+    private boolean maternalFilter = true;
+    private boolean maleEvents = true;
+    private boolean femaleEvents = true;
 
     public static DataCache getInstance(){
         return instance;
@@ -293,5 +287,81 @@ public class DataCache {
         this.maternalFilter = maternalFilter;
         this.maleEvents = maleEvents;
         this.femaleEvents = femaleEvents;
+    }
+
+    public boolean isLifeLines() {
+        return lifeLines;
+    }
+
+    public void setLifeLines(boolean lifeLines) {
+        this.lifeLines = lifeLines;
+    }
+
+    public boolean isFamilyLines() {
+        return familyLines;
+    }
+
+    public void setFamilyLines(boolean familyLines) {
+        this.familyLines = familyLines;
+    }
+
+    public boolean isSpouseLines() {
+        return spouseLines;
+    }
+
+    public void setSpouseLines(boolean spouseLines) {
+        this.spouseLines = spouseLines;
+    }
+
+    public boolean isPaternalFilter() {
+        return paternalFilter;
+    }
+
+    public void setPaternalFilter(boolean paternalFilter) {
+        this.paternalFilter = paternalFilter;
+    }
+
+    public boolean isMaternalFilter() {
+        return maternalFilter;
+    }
+
+    public void setMaternalFilter(boolean maternalFilter) {
+        this.maternalFilter = maternalFilter;
+    }
+
+    public boolean isMaleEvents() {
+        return maleEvents;
+    }
+
+    public void setMaleEvents(boolean maleEvents) {
+        this.maleEvents = maleEvents;
+    }
+
+    public boolean isFemaleEvents() {
+        return femaleEvents;
+    }
+
+    public void setFemaleEvents(boolean femaleEvents) {
+        this.femaleEvents = femaleEvents;
+    }
+
+    public Map<String, Event> getMaleEvents() {
+        HashMap<String, Event> maleEvents = new HashMap<>();
+        for(Event e : events.values()){
+            if(getPerson(e.getPersonID()).getGender().equals("m")){
+                maleEvents.put(e.getEventID(), e);
+            }
+        }
+        return maleEvents;
+    }
+
+    public Map<String, Event> getFemaleEvents() {
+        HashMap<String, Event> femaleEvents = new HashMap<>();
+        for(Event e : events.values()){
+            if(getPerson(e.getPersonID()).getGender().equals("f")){
+                femaleEvents.put(e.getEventID(), e);
+            }
+        }
+        return femaleEvents;
     }
 }
