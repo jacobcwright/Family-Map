@@ -255,10 +255,25 @@ public class DataCache {
     }
 
     public ArrayList<Person> getPeopleSearch(String searchString) {
-        return null;
+        searchString = searchString.toLowerCase();
+        ArrayList<Person> result = new ArrayList<>();
+        for(Person p : people.values()){
+            if(p.getFirstName().toLowerCase().contains(searchString) || p.getLastName().toLowerCase().contains(searchString)){
+                result.add(p);
+            }
+        }
+        return result;
     }
 
     public ArrayList<Event> getEventSearch(String searchString) {
-        return null;
+        searchString = searchString.toLowerCase();
+        ArrayList<Event> result = new ArrayList<>();
+        for(Event e : events.values()){
+            if(e.getCountry().toLowerCase().contains(searchString) || e.getCity().toLowerCase().contains(searchString)
+            || String.valueOf(e.getYear()).toLowerCase().contains(searchString) || e.getEventType().toLowerCase().contains(searchString)){
+                result.add(e);
+            }
+        }
+        return result;
     }
 }

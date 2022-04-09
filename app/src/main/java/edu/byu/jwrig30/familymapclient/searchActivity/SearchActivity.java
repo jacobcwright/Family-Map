@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,13 +60,13 @@ public class SearchActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchResults();
+                FamilyMapAdapter adapter = searchResults();
+                recyclerView.setAdapter(adapter);
             }
         });
 
-        Map<String, Person> people = DataCache.getInstance().getPeople();
-        Map<String, Event> events =  DataCache.getInstance().getEvents();
-        FamilyMapAdapter adapter = new FamilyMapAdapter(people, events);
+
+        FamilyMapAdapter adapter = new FamilyMapAdapter(new ArrayList<Person>(), new ArrayList<Event>());
         recyclerView.setAdapter(adapter);
     }
 
@@ -84,10 +85,10 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private class FamilyMapAdapter extends RecyclerView.Adapter<FamilyMapHolder> {
-        private final Map<String, Person> people;
-        private final Map<String, Event> events;
+        private final ArrayList<Person> people;
+        private final ArrayList<Event> events;
 
-        FamilyMapAdapter(Map<String, Person> people, Map<String, Event> events) {
+        FamilyMapAdapter(ArrayList<Person> people, ArrayList<Event> events) {
             this.people = people;
             this.events = events;
         }
@@ -113,16 +114,16 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull FamilyMapHolder holder, int position) {
-            if(position < people.values().size()) {
-                holder.bind((Person) people.values().toArray()[position]);
+            if(position < people.size()) {
+                holder.bind((Person) people.get(position));
             } else {
-                holder.bind((Event) events.values().toArray()[position - people.size()]);
+                holder.bind((Event) events.get(position - people.size()));
             }
         }
 
         @Override
         public int getItemCount() {
-            return people.values().size() + events.values().size();
+            return people.size() + events.size();
         }
     }
 
@@ -184,8 +185,10 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    private void searchResults(){
+    private FamilyMapAdapter searchResults(){
         ArrayList<Person> people = DataCache.getInstance().getPeopleSearch(this.searchString);
         ArrayList<Event> events = DataCache.getInstance().getEventSearch(this.searchString);
+        FamilyMapAdapter adapter = new FamilyMapAdapter(people, events);
+        return adapter;
     }
 }
