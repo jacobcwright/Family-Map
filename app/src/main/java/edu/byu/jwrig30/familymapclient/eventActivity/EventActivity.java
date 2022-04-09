@@ -21,9 +21,10 @@ public class EventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+        String eventID = getIntent().getExtras().getString("Event");
 
         FragmentManager frag = getSupportFragmentManager();
-        Fragment map = new MapFragment();
+        Fragment map = new MapFragment(eventID);
 
         FragmentTransaction fragmentTransaction = frag.beginTransaction();
         fragmentTransaction.add(R.id.eventMap, map);

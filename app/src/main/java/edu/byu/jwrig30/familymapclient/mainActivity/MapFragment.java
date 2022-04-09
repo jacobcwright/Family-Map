@@ -48,11 +48,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private ImageView markerIcon;
     private LinearLayout mapTextView;
     private String clickedPersonID;
+    private boolean eventClicked;
+
+    public MapFragment() {}
+
+    public MapFragment(String eventID) {
+        eventClicked = (eventID != null);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.options_menu, menu);
+        if(!eventClicked) {
+            super.onCreateOptionsMenu(menu, inflater);
+            inflater.inflate(R.menu.options_menu, menu);
+        }
     }
 
     @Override
