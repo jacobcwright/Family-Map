@@ -11,8 +11,6 @@ Settings:
      - Mother's Side
      - Male Events
      - Female Events
-  Logout
-  Up Button
 
 JUnit Tests:
 Server Proxy

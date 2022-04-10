@@ -30,6 +30,7 @@ public class DataCache {
     private boolean maternalFilter = true;
     private boolean maleEvents = true;
     private boolean femaleEvents = true;
+    private boolean settingsChanged = false;
 
     public static DataCache getInstance(){
         return instance;
@@ -343,6 +344,14 @@ public class DataCache {
 
     public void setFemaleEvents(boolean femaleEvents) {
         this.femaleEvents = femaleEvents;
+    }
+
+    public boolean isSettingsChanged() {
+        return settingsChanged;
+    }
+
+    public void setSettingsChanged(boolean settingsChanged) {
+        this.settingsChanged = settingsChanged;
     }
 
     public Map<String, Event> getMaleEvents() {
