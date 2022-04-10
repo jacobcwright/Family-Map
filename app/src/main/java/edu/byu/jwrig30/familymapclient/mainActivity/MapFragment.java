@@ -99,6 +99,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         clickedPersonID = null;
         clickedMarker = null;
         lines = new ArrayList<>();
+        markers = new ArrayList<>();
         markerDetails = view.findViewById(R.id.detailsText);
         markerIcon = view.findViewById(R.id.detailsIcon);
         DataCache.getInstance().initEventColors();
@@ -147,9 +148,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onResume() {
         super.onResume();
-        if (map != null) {
+        if (map != null && DataCache.getInstance().isSettingsChanged()) {
             if (markers != null) {
                 mapClear();
+                removeLines();
             }
             addEvents();
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -200,6 +202,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             marker.setTag(event);
             setSnippet(marker, event);
             setMarkerColor(marker, event);
+            markers.add(marker);
             if(event.getEventID().equals(this.clickedEventID)){
                 clickedMarker = marker;
             }

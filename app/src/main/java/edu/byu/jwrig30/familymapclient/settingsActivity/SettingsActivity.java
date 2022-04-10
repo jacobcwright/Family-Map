@@ -12,6 +12,7 @@ import android.widget.Switch;
 
 import edu.byu.jwrig30.familymapclient.R;
 import edu.byu.jwrig30.familymapclient.mainActivity.MainActivity;
+import edu.byu.jwrig30.familymapclient.server.DataCache;
 
 public class SettingsActivity extends AppCompatActivity {
     private SwitchCompat lifeLines;
@@ -35,6 +36,16 @@ public class SettingsActivity extends AppCompatActivity {
         maternal = findViewById(R.id.maternal);
         maleEvents = findViewById(R.id.maleEvents);
         femaleEvents = findViewById(R.id.femaleEvents);
+
+        DataCache data = DataCache.getInstance();
+        lifeLines.setChecked(data.isLifeLines());
+        familyLines.setChecked(data.isFamilyLines());
+        spouseLines.setChecked(data.isSpouseLines());
+        paternal.setChecked(data.isPaternalFilter());
+        maternal.setChecked(data.isMaternalFilter());
+        maleEvents.setChecked(data.isMaleEvents());
+        femaleEvents.setChecked(data.isFemaleEvents());
+
         logout = findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +53,57 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+            }
+        });
+
+        lifeLines.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.setSettingsChanged(true);
+                data.setLifeLines(lifeLines.isChecked());
+            }
+        });
+
+        familyLines.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.setSettingsChanged(true);
+                data.setFamilyLines(familyLines.isChecked());
+            }
+        });
+        spouseLines.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.setSettingsChanged(true);
+                data.setSpouseLines(spouseLines.isChecked());
+            }
+        });
+        paternal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.setSettingsChanged(true);
+                data.setPaternalFilter(paternal.isChecked());
+            }
+        });
+        maternal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.setSettingsChanged(true);
+                data.setMaternalFilter(maternal.isChecked());
+            }
+        });
+        maleEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.setSettingsChanged(true);
+                data.setMaleEvents(maleEvents.isChecked());
+            }
+        });
+        femaleEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.setSettingsChanged(true);
+                data.setFemaleEvents(femaleEvents.isChecked());
             }
         });
     }
