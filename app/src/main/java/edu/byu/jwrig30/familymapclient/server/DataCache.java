@@ -77,7 +77,15 @@ public class DataCache {
             return results;
         }
         else {
-            return null;
+            Person spouse = getPerson(currentPerson.getSpouseID());
+            HashMap<String, Event> results = new HashMap<>();
+            for(Event e : events.values()){
+                if(e.getPersonID().equals(spouse.getPersonID()) ||
+                        e.getPersonID().equals(currentPerson.getPersonID())){
+                    results.put(e.getEventID(), e);
+                }
+            }
+            return results;
         }
     }
 

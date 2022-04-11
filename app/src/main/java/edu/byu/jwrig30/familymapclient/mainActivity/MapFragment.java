@@ -154,6 +154,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 removeLines();
             }
             addEvents();
+
+            DataCache data = DataCache.getInstance();
+            Person clickedPerson = data.getPerson(((Event)clickedMarker.getTag()).getPersonID());
+            if(clickedPerson.getGender().equals("m") && !data.isMaleEvents()) return;
+            if(clickedPerson.getGender().equals("f") && !data.isFemaleEvents()) return;
+
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(@NonNull Marker marker) {
@@ -176,6 +182,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         }
         markers.clear();
+        if(clickedMarker == null) return;
+        DataCache data = DataCache.getInstance();
+        Person clickedPerson = data.getPerson(((Event)clickedMarker.getTag()).getPersonID());
+        if(clickedPerson.getGender().equals("m") && !data.isMaleEvents()) return;
+        if(clickedPerson.getGender().equals("f") && !data.isFemaleEvents()) return;
         markers.add(clickedMarker);
     }
 
@@ -231,6 +242,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             else if(data.isFemaleEvents() && !data.isMaleEvents()){
                 events = data.getFemaleEvents();
             }
+        }
+        else {
+            events = data.getEvents();
         }
 
         for(Event event : events.values()){
@@ -311,7 +325,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
      */
     private void drawLines(Marker marker){
         DataCache data = DataCache.getInstance();
-        if(!data.isMaternalFilter() && !data.isPaternalFilter()) return;
         if(!data.isMaleEvents() && !data.isFemaleEvents()) return;
         if(data.isSpouseLines()){
             drawSpouseLines(marker);
