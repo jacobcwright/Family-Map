@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -170,9 +171,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void mapClear() {
         for (Marker m : markers){
-            m.remove();
+            if(!m.equals(clickedMarker)){
+                m.remove();
+            }
         }
         markers.clear();
+        markers.add(clickedMarker);
     }
 
     /**
@@ -182,18 +186,68 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         DataCache data = DataCache.getInstance();
         ///Person user = data.getCurrentPerson();
         Map<String, Event> events = new HashMap<>();
-        if(data.isFemaleEvents() && data.isMaleEvents()){
-           events = data.getEvents();
+
+        // both maternal & paternal
+        if(data.isMaternalFilter() && data.isPaternalFilter()){
+            // both female & male events
+            if(data.isFemaleEvents() && data.isMaleEvents()){
+                events = data.getEvents();
+            }
+            // male events only
+            else if(!data.isFemaleEvents() && data.isMaleEvents()){
+                events = data.getMaleEvents();
+            }
+            // female events only
+            else if(data.isFemaleEvents() && !data.isMaleEvents()){
+                events = data.getFemaleEvents();
+            }
         }
-        else if(!data.isFemaleEvents() && data.isMaleEvents()){
-            events = data.getMaleEvents();
+        // Paternal side only
+        else if(!data.isMaternalFilter() && data.isPaternalFilter()){
+            // both female & male events
+            if(data.isFemaleEvents() && data.isMaleEvents()){
+                events = data.getEvents();
+            }
+            // male events only
+            else if(!data.isFemaleEvents() && data.isMaleEvents()){
+                events = data.getMaleEvents();
+            }
+            // female events only
+            else if(data.isFemaleEvents() && !data.isMaleEvents()){
+                events = data.getFemaleEvents();
+            }
         }
-        else if(data.isFemaleEvents() && !data.isMaleEvents()){
-            events = data.getFemaleEvents();
+        // Maternal side only
+        else if(data.isMaternalFilter() && !data.isPaternalFilter()){
+            // both female & male events
+            if(data.isFemaleEvents() && data.isMaleEvents()){
+                events = data.getEvents();
+            }
+            // male events only
+            else if(!data.isFemaleEvents() && data.isMaleEvents()){
+                events = data.getMaleEvents();
+            }
+            // female events only
+            else if(data.isFemaleEvents() && !data.isMaleEvents()){
+                events = data.getFemaleEvents();
+            }
         }
-        else {
-            return;
-        }
+
+////============================= Gender FILTER ONLY =================================================
+//
+//        if(data.isFemaleEvents() && data.isMaleEvents()){
+//           events = data.getEvents();
+//        }
+//        else if(!data.isFemaleEvents() && data.isMaleEvents()){
+//            events = data.getMaleEvents();
+//        }
+//        else if(data.isFemaleEvents() && !data.isMaleEvents()){
+//            events = data.getFemaleEvents();
+//        }
+//        else {
+//            return;
+//        }
+
         for(Event event : events.values()){
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
             Marker marker = map.addMarker(new MarkerOptions()
@@ -254,8 +308,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
      * @param marker
      */
     private void markerClick(Marker marker){
+        if(!markers.contains(marker)) return;
         marker.showInfoWindow();
-        clickedPersonID = ((Event) marker.getTag()).getPersonID();
+        clickedMarker = marker;
+        if(marker.getTag()!= null){
+            clickedPersonID = ((Event) marker.getTag()).getPersonID();
+        }
         markerDetails.setText(marker.getSnippet());
         setIcon(marker);
         removeLines();
@@ -285,8 +343,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
      */
     private void drawSpouseLines(Marker marker) {
         DataCache data = DataCache.getInstance();
+        if(!data.isMaternalFilter() || !data.isPaternalFilter()) return;
         Event event = (Event) marker.getTag();
         Person currentPerson = data.getPerson(event.getPersonID());
+        if(currentPerson.getGender().equals("m")){
+            if(!data.isFemaleEvents()) return;
+        }
+        if(currentPerson.getGender().equals("f")){
+            if(!data.isMaleEvents()) return;
+        }
         if(currentPerson.getSpouseID() == null) return;
         Person spouse = data.getPerson(currentPerson.getSpouseID());
         Event spouseBirth = data.getEventsForPerson(spouse.getPersonID()).get(0);
@@ -329,10 +394,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void drawParentsLine(Person currentPerson, Event currentEvent, int generation){
-        if(currentPerson.getFatherID() != null){
+        DataCache data = DataCache.getInstance();
+        if(currentPerson.getFatherID() != null && data.isPaternalFilter()){
             drawFatherLine(currentPerson, currentEvent, generation);
         }
-        if(currentPerson.getMotherID() != null){
+        if(currentPerson.getMotherID() != null && data.isMaternalFilter()){
             drawMotherLine(currentPerson, currentEvent, generation);
         }
     }
@@ -342,7 +408,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         DataCache data = DataCache.getInstance();
         Person father = data.getPerson(currentPerson.getFatherID());
-        Event fatherBirth = data.getEventsForPerson(father.getPersonID()).get(0);
+        Event fatherBirth = data.getEventsForPersonDefault(father.getPersonID()).get(0);
 
         Polyline line  = map.addPolyline(new PolylineOptions()
                 .add(new LatLng(currentEvent.getLatitude(),currentEvent.getLongitude()),
@@ -360,7 +426,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         DataCache data = DataCache.getInstance();
         Person mother = data.getPerson(currentPerson.getMotherID());
-        Event motherBirth = data.getEventsForPerson(mother.getPersonID()).get(0);
+        Event motherBirth = data.getEventsForPersonDefault(mother.getPersonID()).get(0);
 
         Polyline line  = map.addPolyline(new PolylineOptions()
                 .add(new LatLng(currentEvent.getLatitude(),currentEvent.getLongitude()),

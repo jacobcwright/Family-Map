@@ -51,7 +51,34 @@ public class DataCache {
     }
 
     public Map<String, Event> getEvents() {
-        return events;
+        if(isMaternalFilter() && isPaternalFilter()){
+            return events;
+        }
+        else if(!isMaternalFilter() && isPaternalFilter()){
+            HashMap<Person, String> paternal = getPaternalFamily();
+            HashMap<String, Event> results = new HashMap<>();
+            for(Event e : events.values()){
+                Person person = getPerson(e.getPersonID());
+                if(paternal.containsKey(person)){
+                    results.put(e.getEventID(), e);
+                }
+            }
+            return results;
+        }
+        else if(isMaternalFilter() && !isPaternalFilter()){
+            HashMap<Person, String> maternal = getMaternalFamily();
+            HashMap<String, Event> results = new HashMap<>();
+            for(Event e : events.values()){
+                Person person = getPerson(e.getPersonID());
+                if(maternal.containsKey(person)){
+                    results.put(e.getEventID(), e);
+                }
+            }
+            return results;
+        }
+        else {
+            return null;
+        }
     }
 
     public void setEvents(ArrayList<Event> events) {
@@ -106,9 +133,60 @@ public class DataCache {
     @SuppressLint("NewApi")
     public ArrayList<Event> getEventsForPerson(String personID){
         ArrayList<Event> personEvents = new ArrayList<Event>();
-        for (Event event : events.values()) {
-            if(event.getPersonID().equals(personID)){
+        if(isPaternalFilter() && isMaternalFilter()) {
+            for (Event event : events.values()) {
+                if (event.getPersonID().equals(personID)) {
                     personEvents.add(event);
+                }
+            }
+        }
+        else if(!isPaternalFilter() && isMaternalFilter()){
+            HashMap<Person, String> maternal = getMaternalFamily();
+            for (Event event : events.values()) {
+                if (event.getPersonID().equals(personID)) {
+                    Person person = getPerson(event.getPersonID());
+                    if(maternal.containsKey(person)){
+                        personEvents.add(event);
+                    }
+                }
+            }
+        }
+        else if(isPaternalFilter() && !isMaternalFilter()) {
+            HashMap<Person, String> paternal = getPaternalFamily();
+            for (Event event : events.values()) {
+                if (event.getPersonID().equals(personID)) {
+                    Person person = getPerson(event.getPersonID());
+                    if(paternal.containsKey(person)){
+                        personEvents.add(event);
+                    }
+                }
+            }
+
+        }
+
+        personEvents.sort(new Comparator<Event>() {
+            @Override
+            public int compare(Event t1, Event t2) {
+                if(t1.getYear() <= t2.getYear()){
+                    return -1;
+                }
+                else if(t1.getYear() > t2.getYear()){
+                    return 1;
+                }
+                else return 0;
+            }
+        });
+        return personEvents;
+    }
+
+
+    @SuppressLint("NewApi")
+    public ArrayList<Event> getEventsForPersonDefault(String personID){
+        ArrayList<Event> personEvents = new ArrayList<Event>();
+
+        for (Event event : events.values()) {
+            if (event.getPersonID().equals(personID)) {
+                personEvents.add(event);
             }
         }
 
@@ -279,17 +357,6 @@ public class DataCache {
         return result;
     }
 
-    public void setPreferences(boolean lifeLines, boolean familyLines, boolean spouseLines,
-                               boolean paternalFilter, boolean maternalFilter, boolean maleEvents, boolean femaleEvents){
-        this.lifeLines = lifeLines;
-        this.familyLines = familyLines;
-        this.spouseLines = spouseLines;
-        this.paternalFilter = paternalFilter;
-        this.maternalFilter = maternalFilter;
-        this.maleEvents = maleEvents;
-        this.femaleEvents = femaleEvents;
-    }
-
     public boolean isLifeLines() {
         return lifeLines;
     }
@@ -356,21 +423,99 @@ public class DataCache {
 
     public Map<String, Event> getMaleEvents() {
         HashMap<String, Event> maleEvents = new HashMap<>();
-        for(Event e : events.values()){
-            if(getPerson(e.getPersonID()).getGender().equals("m")){
-                maleEvents.put(e.getEventID(), e);
+        if(isPaternalFilter() && isMaternalFilter()) {
+            for (Event e : events.values()) {
+                if (getPerson(e.getPersonID()).getGender().equals("m")) {
+                    maleEvents.put(e.getEventID(), e);
+                }
             }
+            return maleEvents;
         }
-        return maleEvents;
+        else if(!isPaternalFilter() && isMaternalFilter()){
+            HashMap<Person, String> maternal = getMaternalFamily();
+            for (Event e : events.values()) {
+                Person person = getPerson(e.getPersonID());
+                if (person.getGender().equals("m")) {
+                    if(maternal.containsKey(person)){
+                        maleEvents.put(e.getEventID(), e);
+                    }
+                }
+            }
+            return maleEvents;
+        }
+        else if(isPaternalFilter() && !isMaternalFilter()){
+            HashMap<Person, String> paternal = getPaternalFamily();
+            for (Event e : events.values()) {
+                Person person = getPerson(e.getPersonID());
+                if (person.getGender().equals("m")) {
+                    if(paternal.containsKey(person)){
+                        maleEvents.put(e.getEventID(), e);
+                    }
+                }
+            }
+            return maleEvents;
+        }
+        else {
+            return maleEvents;
+        }
     }
 
     public Map<String, Event> getFemaleEvents() {
         HashMap<String, Event> femaleEvents = new HashMap<>();
-        for(Event e : events.values()){
-            if(getPerson(e.getPersonID()).getGender().equals("f")){
-                femaleEvents.put(e.getEventID(), e);
+        if(isPaternalFilter() && isMaternalFilter()) {
+            for (Event e : events.values()) {
+                if (getPerson(e.getPersonID()).getGender().equals("f")) {
+                    femaleEvents.put(e.getEventID(), e);
+                }
             }
+            return femaleEvents;
         }
-        return femaleEvents;
+        else if(!isPaternalFilter() && isMaternalFilter()){
+            HashMap<Person, String> maternal = getMaternalFamily();
+            for (Event e : events.values()) {
+                Person person = getPerson(e.getPersonID());
+                if (person.getGender().equals("f")) {
+                    if(maternal.containsKey(person)){
+                        femaleEvents.put(e.getEventID(), e);
+                    }
+                }
+            }
+            return femaleEvents;
+        }
+        else if(isPaternalFilter() && !isMaternalFilter()){
+            HashMap<Person, String> paternal = getPaternalFamily();
+            for (Event e : events.values()) {
+                Person person = getPerson(e.getPersonID());
+                if (person.getGender().equals("f")) {
+                    if(paternal.containsKey(person)){
+                        femaleEvents.put(e.getEventID(), e);
+                    }
+                }
+            }
+            return femaleEvents;
+        }
+        else {
+            return femaleEvents;
+        }
+    }
+
+    private HashMap<Person, String> getPaternalFamily(){
+        HashMap<Person, String> paternal = new HashMap<>();
+        if(currentPerson.getFatherID() != null) {
+            Person father = getFather(currentPerson);
+            paternal = getFamilyForPerson(father.getPersonID());
+        }
+        paternal.put(getCurrentPerson(), "Self");
+        return paternal;
+    }
+
+    private HashMap<Person, String> getMaternalFamily(){
+        HashMap<Person, String> maternal = new HashMap<>();
+        if(currentPerson.getMotherID() != null) {
+            Person mother = getMother(currentPerson);
+            maternal = getFamilyForPerson(mother.getPersonID());
+        }
+        maternal.put(getCurrentPerson(), "Self");
+        return maternal;
     }
 }

@@ -50,8 +50,70 @@ public class PersonActivity extends AppCompatActivity {
         gender.setText(person.getGender().equals("m") ? "Male" : "Female");
 
 
-        List<Event> events = DataCache.getInstance().getEventsForPerson(personID);
+        DataCache data = DataCache.getInstance();
+        ArrayList<Event> events = new ArrayList<>();
+        events = DataCache.getInstance().getEventsForPerson(personID);
         people = DataCache.getInstance().getImmediateFamily(personID);
+
+        // both maternal & paternal
+        if(data.isMaternalFilter() && data.isPaternalFilter()){
+            // both female & male events
+            if(data.isFemaleEvents() && data.isMaleEvents()){
+
+            }
+            // male events only
+            else if(!data.isFemaleEvents() && data.isMaleEvents()){
+
+            }
+            // female events only
+            else if(data.isFemaleEvents() && !data.isMaleEvents()){
+
+            }
+            // no events
+            else {
+
+            }
+        }
+        // Paternal side only
+        else if(!data.isMaternalFilter() && data.isPaternalFilter()){
+            // both female & male events
+            if(data.isFemaleEvents() && data.isMaleEvents()){
+
+
+            }
+            // male events only
+            else if(!data.isFemaleEvents() && data.isMaleEvents()){
+
+            }
+            // female events only
+            else if(data.isFemaleEvents() && !data.isMaleEvents()){
+
+            }
+            // no events
+            else {
+
+            }
+        }
+        // Maternal side only
+        else if(data.isMaternalFilter() && !data.isPaternalFilter()){
+            // both female & male events
+            if(data.isFemaleEvents() && data.isMaleEvents()){
+
+
+            }
+            // male events only
+            else if(!data.isFemaleEvents() && data.isMaleEvents()){
+
+            }
+            // female events only
+            else if(data.isFemaleEvents() && !data.isMaleEvents()){
+
+            }
+            // no events
+            else {
+
+            }
+        }
         lifeEvents.setAdapter(new ExpandableListAdapter(events, new ArrayList<Person>(people.keySet())));
 
     }
