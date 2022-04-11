@@ -219,11 +219,11 @@ public class DataCache {
         Person root = getPerson(personID);
         getSpouse(family, root);
         Person mother = getMother(root);
-        if(mother != null){
+        if(mother != null && isMaternalFilter()){
             family.put(getMother(root),"Mother");
         }
         Person father = getFather(root);
-        if(father != null){
+        if(father != null && isPaternalFilter()){
             family.put(getFather(root),"Father");
         }
         getChildren(family, root);
