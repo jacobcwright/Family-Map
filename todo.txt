@@ -6,11 +6,8 @@ Event: DONE
 Search: DONE
 Settings:
   Lines : DONE
-  Filters
-     - Father's Side
-     - Mother's Side
-     - Male Events
-     - Female Events
+  Filters : DONE
+     - Person Activity ?
 
 JUnit Tests:
 Server Proxy

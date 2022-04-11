@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -171,6 +170,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void mapClear() {
         for (Marker m : markers){
+            if(m == null) continue;
             if(!m.equals(clickedMarker)){
                 m.remove();
             }
@@ -232,21 +232,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 events = data.getFemaleEvents();
             }
         }
-
-////============================= Gender FILTER ONLY =================================================
-//
-//        if(data.isFemaleEvents() && data.isMaleEvents()){
-//           events = data.getEvents();
-//        }
-//        else if(!data.isFemaleEvents() && data.isMaleEvents()){
-//            events = data.getMaleEvents();
-//        }
-//        else if(data.isFemaleEvents() && !data.isMaleEvents()){
-//            events = data.getFemaleEvents();
-//        }
-//        else {
-//            return;
-//        }
 
         for(Event event : events.values()){
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
@@ -326,6 +311,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
      */
     private void drawLines(Marker marker){
         DataCache data = DataCache.getInstance();
+        if(!data.isMaternalFilter() && !data.isPaternalFilter()) return;
+        if(!data.isMaleEvents() && !data.isFemaleEvents()) return;
         if(data.isSpouseLines()){
             drawSpouseLines(marker);
         }
