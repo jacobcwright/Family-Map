@@ -45,7 +45,7 @@ public class ServerProxyTest {
 
         ServerProxy server = new ServerProxy();
         // change username each time you run  test
-        RegisterRequest req = new RegisterRequest("newUser123", "parker", "email", "Test", "Person", "m");
+        RegisterRequest req = new RegisterRequest("newUser1234", "parker", "email", "Test", "Person", "m");
         RegisterResult result = server.register(req, "127.0.0.1", "8080");
 
         Assert.assertTrue(result.getSuccess());

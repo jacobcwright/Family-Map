@@ -55,65 +55,6 @@ public class PersonActivity extends AppCompatActivity {
         events = DataCache.getInstance().getEventsForPerson(personID);
         people = DataCache.getInstance().getImmediateFamily(personID);
 
-        // both maternal & paternal
-        if(data.isMaternalFilter() && data.isPaternalFilter()){
-            // both female & male events
-            if(data.isFemaleEvents() && data.isMaleEvents()){
-
-            }
-            // male events only
-            else if(!data.isFemaleEvents() && data.isMaleEvents()){
-
-            }
-            // female events only
-            else if(data.isFemaleEvents() && !data.isMaleEvents()){
-
-            }
-            // no events
-            else {
-
-            }
-        }
-        // Paternal side only
-        else if(!data.isMaternalFilter() && data.isPaternalFilter()){
-            // both female & male events
-            if(data.isFemaleEvents() && data.isMaleEvents()){
-
-
-            }
-            // male events only
-            else if(!data.isFemaleEvents() && data.isMaleEvents()){
-
-            }
-            // female events only
-            else if(data.isFemaleEvents() && !data.isMaleEvents()){
-
-            }
-            // no events
-            else {
-
-            }
-        }
-        // Maternal side only
-        else if(data.isMaternalFilter() && !data.isPaternalFilter()){
-            // both female & male events
-            if(data.isFemaleEvents() && data.isMaleEvents()){
-
-
-            }
-            // male events only
-            else if(!data.isFemaleEvents() && data.isMaleEvents()){
-
-            }
-            // female events only
-            else if(data.isFemaleEvents() && !data.isMaleEvents()){
-
-            }
-            // no events
-            else {
-
-            }
-        }
         lifeEvents.setAdapter(new ExpandableListAdapter(events, new ArrayList<Person>(people.keySet())));
 
     }

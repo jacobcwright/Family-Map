@@ -37,6 +37,13 @@ public class ServerProxy {
      * De-serialize to result and return it
      */
 
+    /**
+     * Proxy for /login api
+     * @param req
+     * @param serverHost
+     * @param serverPort
+     * @return
+     */
     public LoginResult login(LoginRequest req, String serverHost, String serverPort){
         Gson gson = new Gson();
         try{
@@ -93,6 +100,13 @@ public class ServerProxy {
         }
     }
 
+    /**
+     * Proxy for /register api
+     * @param req
+     * @param serverHost
+     * @param serverPort
+     * @return
+     */
     public RegisterResult register(RegisterRequest req, String serverHost, String serverPort){
         Gson gson = new Gson();
         try{
@@ -153,6 +167,13 @@ public class ServerProxy {
         }
     }
 
+    /**
+     * Returns all people
+     * @param req
+     * @param serverHost
+     * @param serverPort
+     * @return
+     */
     public PersonResult getPeople(PersonRequest req, String serverHost, String serverPort){
         Gson gson = new Gson();
         try{
@@ -212,6 +233,13 @@ public class ServerProxy {
         }
     }
 
+    /**
+     * Returns all events
+     * @param req
+     * @param serverHost
+     * @param serverPort
+     * @return
+     */
     public EventResult getEvents(EventRequest req, String serverHost, String serverPort){
         Gson gson = new Gson();
         try{

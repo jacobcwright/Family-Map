@@ -55,6 +55,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private ArrayList<Marker> markers;
     public MapFragment() {}
 
+    // for EventActivity
     public MapFragment(String eventID) {
         clickedEventID = eventID;
         eventClicked = (eventID != null);
@@ -113,7 +114,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 startActivity(person);
             }
         });
-
 
         return view;
     }
@@ -393,6 +393,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         drawParentsLine(currentPerson, event, 0);
     }
 
+    /**
+     * Helper function, draws lines for parents
+     * @param currentPerson
+     * @param currentEvent
+     * @param generation
+     */
     private void drawParentsLine(Person currentPerson, Event currentEvent, int generation){
         DataCache data = DataCache.getInstance();
         if(currentPerson.getFatherID() != null && data.isPaternalFilter()){
@@ -403,6 +409,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+    /**
+     * Helper function, draws line for father and recursively calls drawparentsLine
+     * @param currentPerson
+     * @param currentEvent
+     * @param generation
+     */
     private void drawFatherLine(Person currentPerson, Event currentEvent, int generation){
         if(currentPerson.getFatherID() == null) return;
 
@@ -421,6 +433,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         drawParentsLine(father, fatherBirth, generation+1);
     }
 
+    /**
+     * Helper function, draws line for mother and recursively calls drawparentsLine
+     * @param currentPerson
+     * @param currentEvent
+     * @param generation
+     */
     private void drawMotherLine(Person currentPerson, Event currentEvent, int generation){
         if(currentPerson.getMotherID() == null) return;
 
@@ -439,6 +457,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         drawParentsLine(mother, motherBirth, generation+1);
     }
 
+    /**
+     * removes all active lines on map
+     */
     private void removeLines(){
         for(Polyline line : lines){
             line.remove();

@@ -189,31 +189,19 @@ public class LoginFragment extends Fragment {
 
         public void checkInputs(){
             // enable login button?
-            if(!TextUtils.isEmpty(host.getText()) &&
+            loginButton.setEnabled(!TextUtils.isEmpty(host.getText()) &&
                     !TextUtils.isEmpty(port.getText()) &&
                     !TextUtils.isEmpty(username.getText()) &&
-                    !TextUtils.isEmpty(password.getText())
-            ){
-                loginButton.setEnabled(true);
-            }
-            else{
-                loginButton.setEnabled(false);
-            }
+                    !TextUtils.isEmpty(password.getText()));
             // enable register button?
-            if(!TextUtils.isEmpty(host.getText()) &&
+            registerButton.setEnabled(!TextUtils.isEmpty(host.getText()) &&
                     !TextUtils.isEmpty(port.getText()) &&
                     !TextUtils.isEmpty(username.getText()) &&
                     !TextUtils.isEmpty(password.getText()) &&
                     !TextUtils.isEmpty(firstName.getText()) &&
                     !TextUtils.isEmpty(lastName.getText()) &&
                     !TextUtils.isEmpty(email.getText()) &&
-                    (male.isChecked() || female.isChecked())
-            ){
-                registerButton.setEnabled(true);
-            }
-            else{
-                registerButton.setEnabled(false);
-            }
+                    (male.isChecked() || female.isChecked()));
         }
     }
 }

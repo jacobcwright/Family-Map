@@ -187,6 +187,10 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper function, returns searchResults from DataCache
+     * @return
+     */
     private FamilyMapAdapter searchResults(){
         ArrayList<Person> people = DataCache.getInstance().getPeopleSearch(this.searchString);
         ArrayList<Event> events = DataCache.getInstance().getEventSearch(this.searchString);

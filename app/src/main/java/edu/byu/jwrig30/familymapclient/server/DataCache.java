@@ -16,7 +16,7 @@ import model.Person;
  * Singleton
  */
 public class DataCache {
-    private static DataCache instance = new DataCache();
+    private static final DataCache instance = new DataCache();
     private final Float[] COLORS = {30.0f, 210.0f, 330.0f, 240.0f, 180.0f, 120.0f, 300.0f, 0.0f, 270.0f, 60.0f};
     Map<String, Person> people;
     Map<String, Event> events;
@@ -50,6 +50,10 @@ public class DataCache {
         this.people = peopleMap;
     }
 
+    /**
+     * get all events based on filters
+     * @return
+     */
     public Map<String, Event> getEvents() {
         if(isMaternalFilter() && isPaternalFilter()){
             if(isFemaleEvents() && isMaleEvents()){
@@ -107,15 +111,6 @@ public class DataCache {
         }
         this.events = eventMap;
     }
-
-    public Authtoken getAuthtoken() {
-        return authtoken;
-    }
-
-    public void setAuthtoken(Authtoken authtoken) {
-        this.authtoken = authtoken;
-    }
-
     public Person getCurrentPerson() {
         return currentPerson;
     }
@@ -129,10 +124,9 @@ public class DataCache {
         return people.get(personID);
     }
 
-    public Event getEvent(String eventID){
-        return events.get(eventID);
-    }
-
+    /**
+     * initializes event colors map
+     */
     public void initEventColors(){
         eventColors = new HashMap();
         int colorIndex = 0;
@@ -149,6 +143,11 @@ public class DataCache {
         }
     }
 
+    /**
+     * gets events for person using filters
+     * @param personID
+     * @return
+     */
     @SuppressLint("NewApi")
     public ArrayList<Event> getEventsForPerson(String personID){
         ArrayList<Event> personEvents = new ArrayList<Event>();
@@ -199,6 +198,11 @@ public class DataCache {
     }
 
 
+    /**
+     * gets events for person ignoring filters
+     * @param personID
+     * @return
+     */
     @SuppressLint("NewApi")
     public ArrayList<Event> getEventsForPersonDefault(String personID){
         ArrayList<Event> personEvents = new ArrayList<Event>();
@@ -224,6 +228,11 @@ public class DataCache {
         return personEvents;
     }
 
+    /**
+     * gets ALL family for person recursively
+     * @param personID
+     * @return
+     */
     public HashMap<Person, String> getFamilyForPerson(String personID){
         // breadth-first search so we can use list for simplicity
         HashMap<Person, String> family = new HashMap<>();
@@ -233,6 +242,11 @@ public class DataCache {
         return family;
     }
 
+    /**
+     * gets all immediate family (mother, father, spouse, children) using helper functions.
+     * @param personID
+     * @return
+     */
     public HashMap<Person, String> getImmediateFamily(String personID){
         HashMap<Person, String> family = new HashMap<>();
         Person root = getPerson(personID);
@@ -249,6 +263,11 @@ public class DataCache {
         return family;
     }
 
+    /**
+     * adds children to person hashmap
+     * @param family
+     * @param root
+     */
     private void getChildren(HashMap<Person, String> family, Person root) {
         for(Person p : people.values()){
             if(root.getGender().equals("m")){
@@ -266,6 +285,11 @@ public class DataCache {
         }
     }
 
+    /**
+     * adds spouse to person hashmap
+     * @param family
+     * @param currentPerson
+     */
     private void getSpouse(HashMap<Person, String> family, Person currentPerson) {
         String spouseID = currentPerson.getSpouseID();
         if(spouseID != null){
@@ -276,6 +300,12 @@ public class DataCache {
         }
     }
 
+    /**
+     * adds parents to People hashmap
+     * @param family
+     * @param currentPerson
+     * @param generations
+     */
     private void getParents(HashMap<Person, String> family, Person currentPerson, int generations) {
         Person father = getFather(currentPerson);
         if (father != null) {
@@ -311,6 +341,9 @@ public class DataCache {
         return mother;
     }
 
+    /**
+     * helper function, calculates relationship
+      */
     private String getRelationship(int generations, String gender){
         switch(gender) {
             case "m":
@@ -353,6 +386,11 @@ public class DataCache {
         return eventColors.get(eventType.toLowerCase());
     }
 
+    /**
+     * gets people for search activity
+     * @param searchString
+     * @return
+     */
     public ArrayList<Person> getPeopleSearch(String searchString) {
         searchString = searchString.toLowerCase();
         ArrayList<Person> result = new ArrayList<>();
@@ -364,6 +402,11 @@ public class DataCache {
         return result;
     }
 
+    /**
+     * gets events for search activity
+     * @param searchString
+     * @return
+     */
     public ArrayList<Event> getEventSearch(String searchString) {
         searchString = searchString.toLowerCase();
         ArrayList<Event> result = new ArrayList<>();
@@ -440,6 +483,10 @@ public class DataCache {
         this.settingsChanged = settingsChanged;
     }
 
+    /**
+     * gets all male events based on filters
+     * @return
+     */
     public Map<String, Event> getMaleEvents() {
         HashMap<String, Event> maleEvents = new HashMap<>();
         if(isPaternalFilter() && isMaternalFilter()) {
@@ -479,6 +526,10 @@ public class DataCache {
         }
     }
 
+    /**
+     * gets all female events based on filters
+     * @return
+     */
     public Map<String, Event> getFemaleEvents() {
         HashMap<String, Event> femaleEvents = new HashMap<>();
         if(isPaternalFilter() && isMaternalFilter()) {
@@ -518,6 +569,10 @@ public class DataCache {
         }
     }
 
+    /**
+     * gets members of paternal family
+     * @return
+     */
     private HashMap<Person, String> getPaternalFamily(){
         HashMap<Person, String> paternal = new HashMap<>();
         if(currentPerson.getFatherID() != null) {
@@ -528,6 +583,10 @@ public class DataCache {
         return paternal;
     }
 
+    /**
+     * gets members of maternal family
+     * @return
+     */
     private HashMap<Person, String> getMaternalFamily(){
         HashMap<Person, String> maternal = new HashMap<>();
         if(currentPerson.getMotherID() != null) {
