@@ -401,8 +401,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .add(new LatLng(currentEvent.getLatitude(),currentEvent.getLongitude()),
                         new LatLng(fatherBirth.getLatitude(),fatherBirth.getLongitude())));
         line.setColor(Color.GREEN);
-        // decrease width by 3 for every generation starting at 15, but if past 5 generations, set width to 1
-        line.setWidth((15 - (generation * 3)) > 0 ? (15 - (generation * 3)) : 1);
+        // decrease width by 6 for every generation starting at 20, but if past 3 generations, set width to 1
+        line.setWidth((20 - (generation * 6)) > 0 ? (20 - (generation * 6)) : 1);
         lines.add(line);
 
         drawParentsLine(father, fatherBirth, generation+1);
