@@ -1,6 +1,7 @@
 package edu.byu.jwrig30.familymapclient;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 
 import android.provider.ContactsContract;
@@ -144,12 +145,81 @@ public class ModelTest {
 
     @Test
     public void searchPeoplePass(){
+        ArrayList<Person> family = new ArrayList<>();
+        DataCache data = DataCache.getInstance();
+        Person self = new Person("Jacob_Wright","sheila","Jacob", "Wright", "m");
+        Person spouse = new Person("Jacob_Spouse","sheila","Spouse", "Wright", "f");
+        Person child = new Person("Jacob_Child","sheila","Child", "Wright", "m");
+        Person father = new Person("Jacob_Dad","sheila","Father", "Wright", "m");
+        Person mother = new Person("Jacob_Mom","sheila","Momma", "Wright", "f");
 
+        self.setFatherID("Jacob_Dad");
+        self.setMotherID("Jacob_Mom");
+        self.setSpouseID("Jacob_Spouse");
+        spouse.setSpouseID("Jacob_Wright");
+        child.setFatherID("Jacob_Wright");
+
+        Person father_father = new Person("Jacob_Grandpa","Grandpa","Jacob", "Wright", "m");
+        Person father_mother = new Person("Jacob_Grandma","Grandma","Jacob", "Wright", "f");
+        father.setFatherID("Jacob_Grandpa");
+        father.setMotherID("Jacob_Grandma");
+
+
+        family.add(self);
+        family.add(father);
+        family.add(mother);
+        family.add(father_father);
+        family.add(father_mother);
+        family.add(spouse);
+        family.add(child);
+
+        data.setPeople(family);
+        HashMap<Person, String> results = data.getImmediateFamily("Jacob_Wright");
+
+        assertEquals("Spouse", results.get(spouse));
+        assertEquals("Child", results.get(child));
+        assertEquals("Father", results.get(father));
+        assertEquals("Mother", results.get(mother));
     }
 
     @Test
     public void searchPeopleFail(){
+        ArrayList<Person> family = new ArrayList<>();
+        DataCache data = DataCache.getInstance();
+        Person self = new Person("Jacob_Wright","sheila","Jacob", "Wright", "m");
+        Person spouse = new Person("Jacob_Spouse","sheila","Spouse", "Wright", "f");
+        Person child = new Person("Jacob_Child","sheila","Child", "Wright", "m");
+        Person father = new Person("Jacob_Dad","sheila","Father", "Wright", "m");
+        Person mother = new Person("Jacob_Mom","sheila","Momma", "Wright", "f");
 
+        self.setFatherID("Jacob_Dad");
+        self.setMotherID("Jacob_Mom");
+        self.setSpouseID("Jacob_Spouse");
+        spouse.setSpouseID("Jacob_Wright");
+        child.setFatherID("Jacob_Wright");
+
+        Person father_father = new Person("Jacob_Grandpa","Grandpa","Jacob", "Wright", "m");
+        Person father_mother = new Person("Jacob_Grandma","Grandma","Jacob", "Wright", "f");
+        father.setFatherID("Jacob_Grandpa");
+        father.setMotherID("Jacob_Grandma");
+
+        Person notRelated = new Person("random","sheila","not", "related", "m");
+
+        family.add(self);
+        family.add(father);
+        family.add(mother);
+        family.add(father_father);
+        family.add(father_mother);
+        family.add(spouse);
+        family.add(child);
+        family.add(notRelated);
+
+        data.setPeople(family);
+        HashMap<Person, String> results = data.getImmediateFamily("Jacob_Wright");
+
+        assertFalse(results.containsKey(father_father));
+        assertFalse(results.containsKey(father_mother));
+        assertFalse(results.containsKey(notRelated));
     }
 
     @Test
