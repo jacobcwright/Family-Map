@@ -3,12 +3,15 @@ package edu.byu.jwrig30.familymapclient;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import android.provider.ContactsContract;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -78,17 +81,77 @@ public class ModelTest {
 
         Assert.assertEquals("Father", results.get(father));
         Assert.assertEquals("Grandfather", results.get(father_father));
-        Assert.assertNull(results.get(notRelated));
+        assertNull(results.get(notRelated));
     }
 
     @Test
-    public void filterEventsPass(){
+    public void filterEventsPassAndFail(){
+        DataCache data = DataCache.getInstance();
+        ArrayList<Event> events = new ArrayList<>();
 
-    }
+        Person self = new Person("Jacob_Wright","jacob","Jacob", "Wright", "m");
+        Person randomGirl = new Person("differentPerson","jacob","random", "girl", "f");
+        Event event1 = new Event("event1", "jacob", "Jacob_Wright",50.0f, 50.0f, "Chicken", "Nugget", "Event Number 1", 1900);
+        Event event2 = new Event("event2", "jacob", "Jacob_Wright",100.0f, 50.0f, "Chicken", "Nugget", "Event Number 2", 1950);
+        Event event3 = new Event("event3", "jacob", "Jacob_Wright",50.0f, 100.0f, "Chicken", "Nugget", "Event Number 3", 2000);
+        Event event4 = new Event("event4", "jacob", "differentPerson",0f, 100.0f, "Chicken", "Nugget", "Event for random girl 1", 2000);
+        Event event5 = new Event("event5", "jacob", "differentPerson",30.0f, 100.0f, "Chicken", "Nugget", "Event for random girl 2", 2000);
+        Event event6 = new Event("event6", "jacob", "differentPerson",90.0f, 100.0f, "Chicken", "Nugget", "Event for random girl 3", 2000);
 
-    @Test
-    public void filterEventsFail(){
+        ArrayList<Person> people = new ArrayList<>();
+        people.add(self);
+        people.add(randomGirl);
+        data.setPeople(people);
 
+        events.add(event1);
+        events.add(event2);
+        events.add(event3);
+        events.add(event4);
+        events.add(event5);
+        events.add(event6);
+
+        data.setEvents(events);
+
+        // no filters == all events
+        HashMap<String, Event> eventResults = (HashMap<String, Event>) data.getEvents();
+        assertEquals(event1,eventResults.get(event1.getEventID()));
+        assertEquals(event2,eventResults.get(event2.getEventID()));
+        assertEquals(event3,eventResults.get(event3.getEventID()));
+        assertEquals(event4,eventResults.get(event4.getEventID()));
+        assertEquals(event5,eventResults.get(event5.getEventID()));
+        assertEquals(event6,eventResults.get(event6.getEventID()));
+
+        // MALE EVENTS ONLY
+        data.setFemaleEvents(false);
+        eventResults = (HashMap<String, Event>) data.getEvents();
+        assertEquals(event1,eventResults.get(event1.getEventID()));
+        assertEquals(event2,eventResults.get(event2.getEventID()));
+        assertEquals(event3,eventResults.get(event3.getEventID()));
+        assertNull(eventResults.get(event4.getEventID()));
+        assertNull(eventResults.get(event5.getEventID()));
+        assertNull(eventResults.get(event6.getEventID()));
+
+        // FEMALE EVENTS ONLY
+        data.setFemaleEvents(true);
+        data.setMaleEvents(false);
+        eventResults = (HashMap<String, Event>) data.getEvents();
+        assertNull(eventResults.get(event1.getEventID()));
+        assertNull(eventResults.get(event2.getEventID()));
+        assertNull(eventResults.get(event3.getEventID()));
+        assertEquals(event4,eventResults.get(event4.getEventID()));
+        assertEquals(event5,eventResults.get(event5.getEventID()));
+        assertEquals(event6,eventResults.get(event6.getEventID()));
+
+        // NO EVENTS
+        data.setFemaleEvents(false);
+        data.setMaleEvents(false);
+        eventResults = (HashMap<String, Event>) data.getEvents();
+        assertNull(eventResults.get(event1.getEventID()));
+        assertNull(eventResults.get(event2.getEventID()));
+        assertNull(eventResults.get(event3.getEventID()));
+        assertNull(eventResults.get(event4.getEventID()));
+        assertNull(eventResults.get(event5.getEventID()));
+        assertNull(eventResults.get(event6.getEventID()));
     }
 
     @Test
@@ -97,7 +160,6 @@ public class ModelTest {
         ArrayList<Event> events = new ArrayList<Event>();
 
         Person self = new Person("Jacob_Wright","jacob","Jacob", "Wright", "m");
-        // String eventID, String username, String personID, float latitude, float longitude, String country, String city, String eventType, int year
         Event event1 = new Event("event1", "jacob", "Jacob_Wright",50.0f, 50.0f, "Chicken", "Nugget", "Event Number 1", 1900);
         Event event2 = new Event("event2", "jacob", "Jacob_Wright",100.0f, 50.0f, "Chicken", "Nugget", "Event Number 2", 1950);
         Event event3 = new Event("event3", "jacob", "Jacob_Wright",50.0f, 100.0f, "Chicken", "Nugget", "Event Number 3", 2000);
@@ -123,7 +185,6 @@ public class ModelTest {
         ArrayList<Event> events = new ArrayList<Event>();
 
         Person self = new Person("Jacob_Wright","jacob","Jacob", "Wright", "m");
-        // String eventID, String username, String personID, float latitude, float longitude, String country, String city, String eventType, int year
         Event event1 = new Event("event1", "jacob", "Jacob_Wright",50.0f, 50.0f, "Chicken", "Nugget", "Event Number 1", 1900);
         Event event2 = new Event("event2", "jacob", "Jacob_Wright",100.0f, 50.0f, "Chicken", "Nugget", "Event Number 2", 1950);
         Event event3 = new Event("event3", "jacob", "Jacob_Wright",50.0f, 100.0f, "Chicken", "Nugget", "Event Number 3", 2000);
@@ -224,12 +285,64 @@ public class ModelTest {
 
     @Test
     public void searchEventPass(){
+        DataCache data = DataCache.getInstance();
+        ArrayList<Event> events = new ArrayList<Event>();
 
+        Person self = new Person("Jacob_Wright","jacob","Jacob", "Wright", "m");
+        Event event1 = new Event("event1", "jacob", "Jacob_Wright",50.0f, 50.0f, "Chicken", "Nugget", "Event Number 1", 1900);
+        Event event2 = new Event("event2", "jacob", "Jacob_Wright",100.0f, 50.0f, "Chicken", "Nugget", "Event Number 2", 1950);
+        Event event3 = new Event("event3", "jacob", "Jacob_Wright",50.0f, 100.0f, "Chicken", "Nugget", "Event Number 3", 2000);
+        Event event4 = new Event("event4", "jacob", "differentPerson",0f, 100.0f, "Chicken", "Nugget", "Event for random guy 1", 2000);
+        Event event5 = new Event("event5", "jacob", "differentPerson",30.0f, 100.0f, "Chicken", "Nugget", "Event for random guy 2", 2000);
+        Event event6 = new Event("event6", "jacob", "differentPerson",90.0f, 100.0f, "Chicken", "Nugget", "Event for random guy 3", 2000);
+
+        events.add(event1);
+        events.add(event2);
+        events.add(event3);
+        events.add(event4);
+        events.add(event5);
+        events.add(event6);
+
+        ArrayList<Person> people = new ArrayList<>();
+        people.add(self);
+        data.setPeople(people);
+        data.setEvents(events);
+        ArrayList<Event> eventsResults = data.getEventsForPerson("Jacob_Wright");
+
+        assertTrue(eventsResults.contains(event1));
+        assertTrue(eventsResults.contains(event2));
+        assertTrue(eventsResults.contains(event3));
     }
 
     @Test
     public void searchEventFail(){
+        DataCache data = DataCache.getInstance();
+        ArrayList<Event> events = new ArrayList<Event>();
 
+        Person self = new Person("Jacob_Wright","jacob","Jacob", "Wright", "m");
+        Event event1 = new Event("event1", "jacob", "Jacob_Wright",50.0f, 50.0f, "Chicken", "Nugget", "Event Number 1", 1900);
+        Event event2 = new Event("event2", "jacob", "Jacob_Wright",100.0f, 50.0f, "Chicken", "Nugget", "Event Number 2", 1950);
+        Event event3 = new Event("event3", "jacob", "Jacob_Wright",50.0f, 100.0f, "Chicken", "Nugget", "Event Number 3", 2000);
+        Event event4 = new Event("event4", "jacob", "differentPerson",0f, 100.0f, "Chicken", "Nugget", "Event for random guy 1", 2000);
+        Event event5 = new Event("event5", "jacob", "differentPerson",30.0f, 100.0f, "Chicken", "Nugget", "Event for random guy 2", 2000);
+        Event event6 = new Event("event6", "jacob", "differentPerson",90.0f, 100.0f, "Chicken", "Nugget", "Event for random guy 3", 2000);
+
+        events.add(event1);
+        events.add(event2);
+        events.add(event3);
+        events.add(event4);
+        events.add(event5);
+        events.add(event6);
+
+        ArrayList<Person> people = new ArrayList<>();
+        people.add(self);
+        data.setPeople(people);
+        data.setEvents(events);
+        ArrayList<Event> eventsResults = data.getEventsForPerson("Jacob_Wright");
+
+        assertFalse(eventsResults.contains(event4));
+        assertFalse(eventsResults.contains(event5));
+        assertFalse(eventsResults.contains(event6));
     }
 
 

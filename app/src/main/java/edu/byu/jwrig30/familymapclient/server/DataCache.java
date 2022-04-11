@@ -52,7 +52,18 @@ public class DataCache {
 
     public Map<String, Event> getEvents() {
         if(isMaternalFilter() && isPaternalFilter()){
-            return events;
+            if(isFemaleEvents() && isMaleEvents()){
+                return events;
+            }
+            else if(!isFemaleEvents() && isMaleEvents()){
+                return getMaleEvents();
+            }
+            else if(isFemaleEvents() && !isMaleEvents()){
+                return getFemaleEvents();
+            }
+            else {
+                return new HashMap<String, Event>();
+            }
         }
         else if(!isMaternalFilter() && isPaternalFilter()){
             HashMap<Person, String> paternal = getPaternalFamily();
