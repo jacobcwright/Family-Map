@@ -1,6 +1,7 @@
 package edu.byu.jwrig30.familymapclient;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import android.provider.ContactsContract;
 
@@ -11,7 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.byu.jwrig30.familymapclient.server.DataCache;
+import edu.byu.jwrig30.familymapclient.server.ServerProxy;
+import model.Event;
 import model.Person;
+import request.LoginRequest;
+import result.LoginResult;
 
 public class ModelTest {
     @Test
@@ -77,7 +82,7 @@ public class ModelTest {
 
     @Test
     public void filterEventsPass(){
-        
+
     }
 
     @Test
@@ -87,12 +92,54 @@ public class ModelTest {
 
     @Test
     public void sortEventsPass(){
+        DataCache data = DataCache.getInstance();
+        ArrayList<Event> events = new ArrayList<Event>();
 
+        Person self = new Person("Jacob_Wright","jacob","Jacob", "Wright", "m");
+        // String eventID, String username, String personID, float latitude, float longitude, String country, String city, String eventType, int year
+        Event event1 = new Event("event1", "jacob", "Jacob_Wright",50.0f, 50.0f, "Chicken", "Nugget", "Event Number 1", 1900);
+        Event event2 = new Event("event2", "jacob", "Jacob_Wright",100.0f, 50.0f, "Chicken", "Nugget", "Event Number 2", 1950);
+        Event event3 = new Event("event3", "jacob", "Jacob_Wright",50.0f, 100.0f, "Chicken", "Nugget", "Event Number 3", 2000);
+
+        events.add(event3);
+        events.add(event1);
+        events.add(event2);
+
+        ArrayList<Person> people = new ArrayList<>();
+        people.add(self);
+        data.setPeople(people);
+        data.setEvents(events);
+        ArrayList<Event> eventsResults = data.getEventsForPerson("Jacob_Wright");
+
+        assertEquals(event1, eventsResults.get(0));
+        assertEquals(event2, eventsResults.get(1));
+        assertEquals(event3, eventsResults.get(2));
     }
 
     @Test
     public void sortEventsFail(){
+        DataCache data = DataCache.getInstance();
+        ArrayList<Event> events = new ArrayList<Event>();
 
+        Person self = new Person("Jacob_Wright","jacob","Jacob", "Wright", "m");
+        // String eventID, String username, String personID, float latitude, float longitude, String country, String city, String eventType, int year
+        Event event1 = new Event("event1", "jacob", "Jacob_Wright",50.0f, 50.0f, "Chicken", "Nugget", "Event Number 1", 1900);
+        Event event2 = new Event("event2", "jacob", "Jacob_Wright",100.0f, 50.0f, "Chicken", "Nugget", "Event Number 2", 1950);
+        Event event3 = new Event("event3", "jacob", "Jacob_Wright",50.0f, 100.0f, "Chicken", "Nugget", "Event Number 3", 2000);
+
+        events.add(event3);
+        events.add(event1);
+        events.add(event2);
+
+        ArrayList<Person> people = new ArrayList<>();
+        people.add(self);
+        data.setPeople(people);
+        data.setEvents(events);
+        ArrayList<Event> eventsResults = data.getEventsForPerson("Jacob_Wright");
+
+        assertNotEquals(event3, eventsResults.get(0));
+        assertNotEquals(event1, eventsResults.get(1));
+        assertNotEquals(event2, eventsResults.get(2));
     }
 
     @Test
